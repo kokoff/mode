@@ -1,4 +1,4 @@
-@namespace(URI="http://requirements/lang", prefix="")
+@namespace(URI="http://requirements", prefix="")
 package requirementslang;
 
 @gmf.diagram

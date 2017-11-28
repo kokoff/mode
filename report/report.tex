@@ -1,9 +1,15 @@
-\documentclass[11pt,a4paper]{report}
+\documentclass[11pt,a4paper]{scrreprt}
 \usepackage[latin1]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{array}
+
+\addtokomafont{disposition}{\rmfamily}
+
+
 
 \title{MSc, MEng and MMath Examinations, 2017?18
 	DEPARTMENT OF COMPUTER SCIENCE
@@ -42,5 +48,81 @@
 	\end{titlepage}
 	
 	
+\chapter{Scenario Discussion}
+
+%In this DSL, a requirements model comprises a number of requirements, test-cases
+%and team members. There are two types of requirements: customer requirements and
+%system requirements. Each requirement has an identifier and a textual description.
+%Requirements can be hierarchically decomposed (e.g. requirement A cannot be satis-
+%fied, unless requirements B and C are satisfied) and can also be in conflict with other
+%requirements (e.g. only one of requirements A and B can be satisfied). Each test-case
+%has a description and can be used to verify one or more technical requirements. Some
+%additional properties include:
+%? The identifier of each requirement is unique
+%? The textual description of a requirement is at least 10 characters long
+%? Customer requirements cannot be in conflict with system requirements (and
+%vice-versa)
+%? Customer requirements can be decomposed into technical requirements, but not
+%the other way round
+%? Each customer requirement needs to be decomposed into at least one technical
+%requirement
+%? Each test-case needs to be verifying at least one technical requirement
+%? Each technical requirement needs originate from at least one customer require-
+%ment
+%? Each leaf requirement (i.e. requirement that is not further decomposed) has a
+%"progress" field that records how much progress the development team has made
+%towards satisfying it so far (e.g. 50%)
+%? The progress of a non-leaf requirement is the average of the progress of the
+%requirements it is decomposed into (e.g. if requirement A is decomposed into
+%requirements B and C, where B and C are at 10% and 20% complete respectively,
+%the progress of A is 15%)
+%? Each requirement can be allocated to one or more team members
+%? Requirements decomposition must be free of cycles
+
+
+\begin{center}
+	
+	\begin{longtable}{| p{0.5\linewidth} | p{0.5\linewidth} |}
+	\hline
+	\textbf{User Requirement} & \textbf{System Requirement} \\ \hline
+	
+	Requirements 
+	& Requirements can be two types User and System. \\ \hline
+	& Requirements should have a unique identifier. \\ \hline
+	& Requirements should have a progress  field. \\ \hline
+	& Requirements should have description which is at least 10 characters. \\ \hline
+	
+	Requirements Conflicts 
+	& Customer Requirements can be in conflict with other Customer Requirements 0..* \\ \hline
+	& System Requirements can be in conflict with other System Requirements 0..* \\ \hline
+	
+	Requirements Decomposition 
+	& Each customer requirement is decomposed into 1..* System Requirements\\ \hline
+	& Each System requirement needs to originate from 1..* User Requirements. \\ \hline
+	& Each Requirement(it has to be System) that cannot be decomposed has a progress field \\ \hline
+	& Each Requirement that can be decomposed further has progress = average progress of the requirements it decomposes to. \\ \hline
+	& Requirements decomposition must be free of cycles. \\ \hline
+	
+	Test Cases
+	& Each test case has a description \\ \hline
+	& Each test case verifies 1..* System Requirements \\ \hline
+	
+	Team Members
+	& Each Requirement can be allocated to 1..* Team Members\\ \hline
+	
+	
+	\hline
+\end{longtable}
+\end{center}	
+
+System requirements cannot be root nodes.
+
+Customer requirements cannot be leaf nodes.
+
+System requirements cannot be parents of customer requirements.
+
+\chapter{Stuff eliminated by metamodel}
+Customer requirements cannot be leaf nodes because they need to have at least one child.
+
 	
 \end{document}

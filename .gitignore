@@ -1,32 +1,34 @@
-# Report directory
+# Eclipse
+workspace/.metadata/
+workspace/requirements.diagram/
+workspace/requirements.edit/
+workspace/requirements.editor/
+workspace/requirements.tests/
+workspace/requirements/.classpath
+workspace/requirements/.gitignore
+workspace/requirements/META-INF/
+workspace/requirements/build.properties
+workspace/requirements/metamodel.ecore
+workspace/requirements/metamodel.genmodel
+workspace/requirements/metamodel.gmfgen
+workspace/requirements/metamodel.gmfgraph
+workspace/requirements/metamodel.gmfmap
+workspace/requirements/metamodel.gmftool
+workspace/requirements/metamodel.trace
+workspace/requirements/plugin.properties
+workspace/requirements/plugin.xml
+workspace/requirements/src/
+
+
+# Embedded Eclipse
+runtime-EclipseApplication/.metadata/
+runtime-EclipseApplication/model/.settings/
+
+
+
+# Report
 report/*
 !report/*.tex
-!report/*.bib
+!report/*.bi
 
-# Eclipse directory
-eclipse/requirements-dsl.diagram/
-eclipse/requirements-dsl.edit/
-eclipse/requirements-dsl.editor/
-eclipse/requirements-dsl.tests/
-eclipse/requirements-dsl/.classpath
-eclipse/requirements-dsl/META-INF/
-eclipse/requirements-dsl/build.properties
-eclipse/requirements-dsl/plugin.properties
-eclipse/requirements-dsl/plugin.xml
-eclipse/requirements-dsl/requirements.ecore
-eclipse/requirements-dsl/requirements.genmodel
-eclipse/requirements-dsl/requirements.gmfgen
-eclipse/requirements-dsl/requirements.gmfgraph
-eclipse/requirements-dsl/requirements.gmfmap
-eclipse/requirements-dsl/requirements.gmftool
-eclipse/requirements-dsl/requirements.trace
-eclipse/requirements-dsl/src/
-eclipse/requirements-dsl/untitled.model
-eclipse/research-project-dsl.zip_expanded/
-eclipse/software-distribution-dsl.zip_expanded/
-eclipse/.metadata/
-eclipse/requirements-dsl/bin/
-
-# Examples
 examples
-
