@@ -1,0 +1,46 @@
+@namespace(URI="http://requirements/lang", prefix="")
+package requirementslang;
+
+@gmf.diagram
+class Model{
+	val TestCase[*] testcases;
+	val TeamMember[*] teamMembers;
+	val Requirement[*] requirements;
+}
+
+@gmf.node(label="identifier")
+abstract class Requirement{
+	attr String identifier;
+	attr String description;
+	attr Integer progress; 
+}
+
+class CustomerRequirement extends Requirement{
+	@gmf.link(label="conflict")
+	ref CustomerRequirement[*] conflicts;
+	@gmf.link(label="dependancie")
+	ref Requirement[1..*] dependacies;
+	
+}
+
+class SystemRequirement extends Requirement{
+	@gmf.link(label="conflict")
+	ref SystemRequirement[*] conflicts;
+	@gmf.link(label="dependancie")
+	ref SystemRequirement[*] dependancies;
+}
+
+
+@gmf.node(label="description")
+class TestCase{
+	attr String description;
+	@gmf.link(label="verifies")
+	ref SystemRequirement[1..*]  requirements;
+}
+
+@gmf.node(label="userName")
+class TeamMember{
+	attr String userName;
+	@gmf.link(label="assigned")
+	ref Requirement[*] requirements;
+}
