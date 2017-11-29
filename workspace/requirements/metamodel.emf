@@ -1,5 +1,5 @@
 @namespace(URI="http://requirements", prefix="")
-package requirementslang;
+package Y1403115;
 
 @gmf.diagram
 class Model{
@@ -10,26 +10,27 @@ class Model{
 
 @gmf.node(label="identifier")
 abstract class Requirement{
-	attr String identifier;
+	id attr String identifier;
+	@gmf.label(label.text="Description")
 	attr String description;
+	@gmf.label(label.text="0")
 	attr Integer progress; 
 }
 
 class CustomerRequirement extends Requirement{
-	@gmf.link(label="conflict")
+	@gmf.link(label="conflict", style="dash", tool.name="Customer Conflict")
 	ref CustomerRequirement[*] conflicts;
 	
-	@gmf.link(label="dependancie")
-	ref Requirement[1..*] dependacies;
-	
+	@gmf.link(label="dependency", tool.name="Customer dependency", source.constraint="self <> oppositeEnd")
+	ref Requirement[1..*] dependency;	
 }
 
 class SystemRequirement extends Requirement{
-	@gmf.link(label="conflict")
+	@gmf.link(label="conflict", style="dash", tool.name="System Conflict")
 	ref SystemRequirement[*] conflicts;
 	
-	@gmf.link(label="dependancie")
-	ref SystemRequirement[*] dependancies;
+	@gmf.link(label="dependency", tool.name = "System dependency")
+	ref SystemRequirement[*] dependency;
 }
 
 

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://requirements">
-  <requirements xsi:type="CustomerRequirement" identifier="CR1"/>
-  <requirements xsi:type="CustomerRequirement" identifier="CR2"/>
-  <requirements xsi:type="SystemRequirement" identifier="SR1"/>
-  <requirements xsi:type="SystemRequirement" identifier="SR2"/>
-</Model>
