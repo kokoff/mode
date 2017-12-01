@@ -14,23 +14,25 @@ abstract class Requirement{
 	@gmf.label(label.text="Description")
 	attr String description;
 	@gmf.label(label.text="0")
-	attr Integer progress; 
+	attr Integer progress=0;
 }
 
 class CustomerRequirement extends Requirement{
-	@gmf.link(label="conflict", style="dash", tool.name="Customer Conflict")
-	ref CustomerRequirement[*] conflicts;
+	@gmf.link(label="conflict", style="dash", tool.name="Customer Req. Conflict")
+	ref CustomerRequirement[*]#incomingConflicts outgoingConflicts;
+	ref CustomerRequirement[*]#outgoingConflicts incomingConflicts;
 	
-	@gmf.link(label="dependency", tool.name="Customer dependency", source.constraint="self <> oppositeEnd")
-	ref Requirement[1..*] dependency;	
+	@gmf.link(label="dependency", tool.name="Customer Req. Dependency")
+	ref Requirement[1..*] dependencies;
 }
 
 class SystemRequirement extends Requirement{
-	@gmf.link(label="conflict", style="dash", tool.name="System Conflict")
-	ref SystemRequirement[*] conflicts;
+	@gmf.link(label="conflict", style="dash", tool.name="System Req. Conflict")
+	ref SystemRequirement[*]#incomingConflicts outgoingConflicts;
+	ref SystemRequirement[*]#outgoingConflicts incomingConflicts;
 	
-	@gmf.link(label="dependency", tool.name = "System dependency")
-	ref SystemRequirement[*] dependency;
+	@gmf.link(label="dependency", tool.name = "System Req. Dependency")
+	ref SystemRequirement[*] dependencies;
 }
 
 
