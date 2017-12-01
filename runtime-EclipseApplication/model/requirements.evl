@@ -9,9 +9,6 @@
 //i) Customer Requirements cannot be leaf nodes.
 
 
-var i : Integer = 5;
-
-
 context Requirement{
 
 	//a) Requirement identifier should be unique.
@@ -32,13 +29,17 @@ context Requirement{
 				self.progress <= 100
 	}
 	
-	//d) Conflicting requirements with common ancestor should not contribute to progress average.
+	//d) There are no conflicting requirements with common ancestors.
+	constraint NoConflictsInTree{
+		check : true//self.println().closure(r|r.dependencies).collect(r|r.incomingConflicts.addAll(r.outgoingConflicts)).println()
+	}
+	
 	
 	//e) Requirements cannot be in conflict and dependency at the same time.
 	constraint ConflictAndDependancie{
-		check : self.dependencies.
+		check : self.closure(r|r.dependencies).
 				excludesAll(self.outgoingConflicts) and
-				self.dependencies.
+				self.closure(r|r.dependencies).
 				excludesAll(self.incomingConflicts)
 	}
 	
@@ -54,22 +55,15 @@ context Requirement{
 
 
 
-context Model{
-	//h) System Requirements cannot be root nodes.
-	constraint SystemRootNodes{
-		check : self.requirements.println().
-				collect(c|c.closure(r|r.dependencies)).flatten().println()
-	}
-}
-
-
-
 context SystemRequirement{
 	//h) System Requirements cannot be root nodes.
 	constraint SystemRootNodes{
-		check : CustomerRequirements.allInstances().
-				collect(c|c.closure(r|r.dependencies)).flatten().println()
+		check : self.isChild()
 	}
+}
+
+operation SystemRequirement isChild(){
+	return Requirement.all.one(r|r.dependencies.contains(self));
 }
 
 	
@@ -80,6 +74,7 @@ context CustomerRequirement{
 		exists(r|r.type().name == "SystemRequirement")
 	}
 }
+
 
 
 
