@@ -1,0 +1,85 @@
+//a) Requirement identifier should be unique.
+//b) Requirement description should be at least 10 characters long.
+//c) Progress must be between 0 and 100 %.
+//d) Conflicting requirements with common ancestor should not contribute to progress average.
+//e) Requirements cannot be in conflict and dependency at the same time.
+//f) There cannot be any loops in dependencies including self referential dependencies.
+//g) System Requirements cannot be parents of Customer Requirements.
+//h) System Requirements cannot be root nodes.
+//i) Customer Requirements cannot be leaf nodes.
+
+
+var i : Integer = 5;
+
+
+context Requirement{
+
+	//a) Requirement identifier should be unique.
+	constraint UniqueIdentifier{
+		check : Requirement.allInstances().
+				one(r|r.identifier == self.identifier)
+	}
+	
+	//b) Requirement description should be at least 10 characters long.
+	constraint RequirementDescriptionLength{
+		guard : self.description.isDefined()
+		check : self.description.length() > 10
+	}
+	
+	//c) Progress must be between 0 and 100 %.
+	constraint ProgressIsPercentage{
+		check : self.progress >=0 and
+				self.progress <= 100
+	}
+	
+	//d) Conflicting requirements with common ancestor should not contribute to progress average.
+	
+	//e) Requirements cannot be in conflict and dependency at the same time.
+	constraint ConflictAndDependancie{
+		check : self.dependencies.
+				excludesAll(self.outgoingConflicts) and
+				self.dependencies.
+				excludesAll(self.incomingConflicts)
+	}
+	
+	//f) There cannot be any loops in dependencies including self referential dependencies.
+	constraint DependencyLoops {
+		check : self.closure(r|r.dependencies).excludes(self)
+	}
+	
+	//g) System Requirements cannot be parents of Customer Requirements.
+	// Enforced by metamodel
+	
+}
+
+
+
+context Model{
+	//h) System Requirements cannot be root nodes.
+	constraint SystemRootNodes{
+		check : self.requirements.println().
+				collect(c|c.closure(r|r.dependencies)).flatten().println()
+	}
+}
+
+
+
+context SystemRequirement{
+	//h) System Requirements cannot be root nodes.
+	constraint SystemRootNodes{
+		check : CustomerRequirements.allInstances().
+				collect(c|c.closure(r|r.dependencies)).flatten().println()
+	}
+}
+
+	
+context CustomerRequirement{
+	//i) Customer Requirements cannot be leaf nodes.
+	constraint CustomerLeafNodes{
+		check : self.closure(r|r.dependencies).
+		exists(r|r.type().name == "SystemRequirement")
+	}
+}
+
+
+
