@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper]{scrreprt}
+\documentclass[11pt,a4paper]{scrartcl}
 \usepackage[latin1]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -48,7 +48,7 @@
 	\end{titlepage}
 	
 	
-\chapter{Scenario Discussion}
+
 
 %In this DSL, a requirements model comprises a number of requirements, test-cases
 %and team members. There are two types of requirements: customer requirements and
@@ -78,6 +78,12 @@
 %the progress of A is 15%)
 %? Each requirement can be allocated to one or more team members
 %? Requirements decomposition must be free of cycles
+
+
+
+\section{Abstract Syntax and Constraints}
+% Explain how you have arrived at the abstract syntax and any well-formedness constraints for your DSL, justify the decisions that you have made, and discuss how you have tested your abstract syntax and well-formedness constraints.
+
 
 
 \begin{center}
@@ -115,14 +121,116 @@
 \end{longtable}
 \end{center}	
 
+
+
+
 System requirements cannot be root nodes.
 
 Customer requirements cannot be leaf nodes.
 
 System requirements cannot be parents of customer requirements.
 
-\chapter{Stuff eliminated by metamodel}
+\subsection{Stuff eliminated by metamodel}
 Customer requirements cannot be leaf nodes because they need to have at least one child.
+
+\section{Editor}
+% Explain the editor for your DSL, justify the decisions that you have made, and briefly argue why your editor provides an appropriate notation for your DSL.
+
+\subsection{Well formdness constraints}
+\begin{enumerate}
+	\item Requirements
+	\begin{enumerate}
+		\item Requirement identifier should be unique.
+		\item Requirement description should be at least 10 characters long.
+		\item Progress must be between 0 and 100 \%.
+		\item Conflicting requirements with common ancestor should not both contribute to progress average of ancestor.
+		
+		\item Requirements cannot be in conflict and dependency at the same time.
+		
+		\item There cannot be any loops in dependencies including self referential dependencies.
+		
+		\item System Requirements cannot be parents of Customer Requirements.
+		\item System Requirements cannot be root nodes.
+		\item Customer Requirements cannot be leaf nodes.
+	\end{enumerate}
+	
+	\item Team members
+	\begin{enumerate}
+		\item Should have a unique user name.
+		\item Requirements allocated to team members include all child requirements.
+		\item Requirements cannot be allocated to team members twice.
+	\end{enumerate}
+	
+	\item Test cases
+	\begin{enumerate}
+		\item Test cases identifier is unique.
+		\item Test cases verify only system requirements.
+		\item Each test case verifies at least one system requirement.
+		\item Multiple test cases can verify one system requirement.
+	\end{enumerate}
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+\section{Model Management Operations}
+%Explain the model management operations for your DSL, justify the decisions that you have made, and briefly demonstrate that the model management operations can be used to fulfill the model management tasks described in Section 1.
+
+\pagebreak
+\appendix
+\section{Appendix A}
+\begin{center}
+	\begin{longtable}{| p{0.5\linewidth} | p{0.5\linewidth} |}
+		\hline
+		\textbf{Scenario} & \textbf{Constraint} \\ \hline
+		
+		In this DSL, a requirements model comprises a number of requirements, test-cases and team members. 
+		& \\ \hline
+		
+		There are two types of requirements: customer requirements and system requirements. 
+		& Customer requirement and system requirements should be subclasses of requirements. \\ \hline
+		
+		Each requirement has an identifier and a textual description.
+		& All requirements have an id and description fields \\ \hline
+		
+		Requirements can be hierarchically decomposed (e.g. requirement A cannot be satisfied, unless requirements B and C are satisfied) and can also be in conflict with other requirements (e.g. only one of requirements A and B can be satisfied). 
+		& Requirements should be part of a tree like structure where each requirement is dependant on it's child requirements. Requirements can be in conflict with other requirements meaning that only one or the other can be satisfied. \\ \hline
+		
+		Each test-case has a description and can be used to verify one or more technical requirements.
+		& Test cases have a description field and verify 1 or more requirements. \\ \hline
+		The identifier of each requirement is unique
+		& \\ \hline
+		The textual description of a requirement is at least 10 characters long
+		& \\ \hline
+		Customer requirements cannot be in conflict with system requirements (and vice-versa)
+		& \\ \hline
+		Customer requirements can be decomposed into technical requirements, but not the other way round
+		& \\ \hline
+		Each customer requirement needs to be decomposed into at least one technical requirement
+		& \\ \hline
+		Each test-case needs to be verifying at least one technical requirement
+		& \\ \hline
+		Each technical requirement needs originate from at least one customer requirement
+		& \\ \hline
+		Each leaf requirement (i.e. requirement that is not further decomposed) has a "progress" field that records how much progress the development team has made towards satisfying it so far (e.g. 50%)
+		& \\ \hline
+		The progress of a non-leaf requirement is the average of the progress of the requirements it is decomposed into (e.g. if requirement A is decomposed into requirements B and C, where B and C are at 10\% and 20\% complete respectively, the progress of A is 15%)
+		& \\ \hline
+		Each requirement can be allocated to one or more team members
+		& \\ \hline
+		Requirements decomposition must be free of cycles
+		& \\ \hline
+		
+		\hline
+	\end{longtable}
+\end{center}	
 
 	
 \end{document}
