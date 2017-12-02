@@ -17,8 +17,13 @@ workspace/requirements/metamodel.gmftool
 workspace/requirements/metamodel.trace
 workspace/requirements/plugin.properties
 workspace/requirements/plugin.xml
-workspace/requirements/src/
 
+workspace/requirements/src/*
+workspace/requirements/src/*/*
+workspace/requirements/src/*/*/*
+!workspace/requirements/src/Y1403115/
+!workspace/requirements/src/Y1403115/impl/
+!workspace/requirements/src/Y1403115/impl/RequirementImpl.java
 
 # Embedded Eclipse
 runtime-EclipseApplication/.metadata/

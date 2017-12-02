@@ -8,6 +8,7 @@ class Model{
 	val Requirement[*] requirements;
 }
 
+
 @gmf.node(label="identifier")
 abstract class Requirement{
 	id attr String identifier;
@@ -15,24 +16,24 @@ abstract class Requirement{
 	attr String description="";
 	@gmf.label(label.text="0")
 	attr Integer progress=0;
+	
+	@gmf.link(label="dependency", tool.name = "Dependency", target.decoration="arrow")
+	ref Requirement[*]#parents children;
+	ref Requirement[*]#children parents;
 }
+
 
 class CustomerRequirement extends Requirement{
-	@gmf.link(label="conflict", style="dash", tool.name="Customer Req. Conflict")
-	ref CustomerRequirement[*]#incomingConflicts outgoingConflicts;
-	ref CustomerRequirement[*]#outgoingConflicts incomingConflicts;
-	
-	@gmf.link(label="dependency", tool.name="Customer Req. Dependency")
-	ref Requirement[1..*] dependencies;
+	@gmf.link(label="conflict", style="dash", tool.name="Customer Requirement Conflict")
+	ref CustomerRequirement[*]#conflictsIncoming conflictsOutgoing;
+	ref CustomerRequirement[*]#conflictsOutgoing conflictsIncoming;
 }
 
+
 class SystemRequirement extends Requirement{
-	@gmf.link(label="conflict", style="dash", tool.name="System Req. Conflict")
-	ref SystemRequirement[*]#incomingConflicts outgoingConflicts;
-	ref SystemRequirement[*]#outgoingConflicts incomingConflicts;
-	
-	@gmf.link(label="dependency", tool.name = "System Req. Dependency")
-	ref SystemRequirement[*] dependencies;
+	@gmf.link(label="conflict", style="dash", tool.name="System Requirement Conflict")
+	ref SystemRequirement[*]#conflictsIncoming conflictsOutgoing;
+	ref SystemRequirement[*]#conflictsOutgoing conflictsIncoming;
 }
 
 
@@ -42,6 +43,7 @@ class TestCase{
 	@gmf.link(label="verifies")
 	ref SystemRequirement[1..*]  requirements;
 }
+
 
 @gmf.node(label="userName")
 class TeamMember{
