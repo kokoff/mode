@@ -1,0 +1,391 @@
+/**
+ */
+package Y1403115.impl;
+
+import Y1403115.Requirement;
+import Y1403115.Y1403115Package;
+
+import java.util.Collection;
+import org.eclipse.emf.common.notify.Notification;
+
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Requirement</b></em>'.
+ * <!-- end-user-doc -->
+ * <p>
+ * The following features are implemented:
+ * </p>
+ * <ul>
+ *   <li>{@link Y1403115.impl.RequirementImpl#getIdentifier <em>Identifier</em>}</li>
+ *   <li>{@link Y1403115.impl.RequirementImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link Y1403115.impl.RequirementImpl#getProgress <em>Progress</em>}</li>
+ *   <li>{@link Y1403115.impl.RequirementImpl#getChildren <em>Children</em>}</li>
+ *   <li>{@link Y1403115.impl.RequirementImpl#getParents <em>Parents</em>}</li>
+ * </ul>
+ *
+ * @generated
+ */
+public abstract class RequirementImpl extends EObjectImpl implements Requirement {
+	/**
+	 * The default value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIdentifier()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String IDENTIFIER_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIdentifier()
+	 * @generated
+	 * @ordered
+	 */
+	protected String identifier = IDENTIFIER_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DESCRIPTION_EDEFAULT = "";
+
+	/**
+	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected String description = DESCRIPTION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getProgress() <em>Progress</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getProgress()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Integer PROGRESS_EDEFAULT = new Integer(0);
+	
+	/**
+	 * @generated
+	 */
+	protected Integer progress = PROGRESS_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getChildren() <em>Children</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getChildren()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Requirement> children;
+
+	/**
+	 * The cached value of the '{@link #getParents() <em>Parents</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getParents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Requirement> parents;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RequirementImpl() {
+		super();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EClass eStaticClass() {
+		return Y1403115Package.Literals.REQUIREMENT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIdentifier(String newIdentifier) {
+		String oldIdentifier = identifier;
+		identifier = newIdentifier;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__IDENTIFIER, oldIdentifier, identifier));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDescription(String newDescription) {
+		String oldDescription = description;
+		description = newDescription;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__DESCRIPTION, oldDescription, description));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public Integer getProgress() {
+		
+		if (this.getChildren().size() > 0){
+			progress = 0;
+			for (Requirement requirement : getChildren()){
+				progress += requirement.getProgress();
+			}
+			progress /= getChildren().size();			
+		}
+		
+		
+		return progress;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public void setProgress(Integer newProgress) {
+		Integer oldProgress = progress;
+		progress = newProgress;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__PROGRESS, oldProgress, progress));
+		
+		// Cause parent to change progress in viewer by calling it's set method
+		if (this.getParents().size() > 0){
+			for (Requirement requirement : getParents()){
+				requirement.setProgress(PROGRESS_EDEFAULT);
+			}			
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Requirement> getChildren() {
+		if (children == null) {
+			children = new EObjectWithInverseResolvingEList.ManyInverse<Requirement>(Requirement.class, this, Y1403115Package.REQUIREMENT__CHILDREN, Y1403115Package.REQUIREMENT__PARENTS);
+		}
+		return children;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Requirement> getParents() {
+		if (parents == null) {
+			parents = new EObjectWithInverseResolvingEList.ManyInverse<Requirement>(Requirement.class, this, Y1403115Package.REQUIREMENT__PARENTS, Y1403115Package.REQUIREMENT__CHILDREN);
+		}
+		return parents;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case Y1403115Package.REQUIREMENT__CHILDREN:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getChildren()).basicAdd(otherEnd, msgs);
+			case Y1403115Package.REQUIREMENT__PARENTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getParents()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case Y1403115Package.REQUIREMENT__CHILDREN:
+				return ((InternalEList<?>)getChildren()).basicRemove(otherEnd, msgs);
+			case Y1403115Package.REQUIREMENT__PARENTS:
+				return ((InternalEList<?>)getParents()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+		switch (featureID) {
+			case Y1403115Package.REQUIREMENT__IDENTIFIER:
+				return getIdentifier();
+			case Y1403115Package.REQUIREMENT__DESCRIPTION:
+				return getDescription();
+			case Y1403115Package.REQUIREMENT__PROGRESS:
+				return getProgress();
+			case Y1403115Package.REQUIREMENT__CHILDREN:
+				return getChildren();
+			case Y1403115Package.REQUIREMENT__PARENTS:
+				return getParents();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void eSet(int featureID, Object newValue) {
+		switch (featureID) {
+			case Y1403115Package.REQUIREMENT__IDENTIFIER:
+				setIdentifier((String)newValue);
+				return;
+			case Y1403115Package.REQUIREMENT__DESCRIPTION:
+				setDescription((String)newValue);
+				return;
+			case Y1403115Package.REQUIREMENT__PROGRESS:
+				setProgress((Integer)newValue);
+				return;
+			case Y1403115Package.REQUIREMENT__CHILDREN:
+				getChildren().clear();
+				getChildren().addAll((Collection<? extends Requirement>)newValue);
+				return;
+			case Y1403115Package.REQUIREMENT__PARENTS:
+				getParents().clear();
+				getParents().addAll((Collection<? extends Requirement>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void eUnset(int featureID) {
+		switch (featureID) {
+			case Y1403115Package.REQUIREMENT__IDENTIFIER:
+				setIdentifier(IDENTIFIER_EDEFAULT);
+				return;
+			case Y1403115Package.REQUIREMENT__DESCRIPTION:
+				setDescription(DESCRIPTION_EDEFAULT);
+				return;
+			case Y1403115Package.REQUIREMENT__PROGRESS:
+				setProgress(PROGRESS_EDEFAULT);
+				return;
+			case Y1403115Package.REQUIREMENT__CHILDREN:
+				getChildren().clear();
+				return;
+			case Y1403115Package.REQUIREMENT__PARENTS:
+				getParents().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean eIsSet(int featureID) {
+		switch (featureID) {
+			case Y1403115Package.REQUIREMENT__IDENTIFIER:
+				return IDENTIFIER_EDEFAULT == null ? identifier != null : !IDENTIFIER_EDEFAULT.equals(identifier);
+			case Y1403115Package.REQUIREMENT__DESCRIPTION:
+				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+			case Y1403115Package.REQUIREMENT__PROGRESS:
+				return PROGRESS_EDEFAULT == null ? progress != null : !PROGRESS_EDEFAULT.equals(progress);
+			case Y1403115Package.REQUIREMENT__CHILDREN:
+				return children != null && !children.isEmpty();
+			case Y1403115Package.REQUIREMENT__PARENTS:
+				return parents != null && !parents.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (identifier: ");
+		result.append(identifier);
+		result.append(", description: ");
+		result.append(description);
+		result.append(", progress: ");
+		result.append(progress);
+		result.append(')');
+		return result.toString();
+	}
+
+} //RequirementImpl
