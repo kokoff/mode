@@ -3,7 +3,7 @@
 //c) Progress must be between 0 and 100 %.
 //d) Conflicting requirements with common ancestor should not contribute to progress average.
 //e) Requirements cannot be in conflict and dependency at the same time.
-//f) There cannot be any loops in dependencies including self referential dependencies.
+//f) There cannot be any loops in children including self referential children.
 //g) System Requirements cannot be parents of Customer Requirements.
 //h) System Requirements cannot be root nodes.
 //i) Customer Requirements cannot be leaf nodes.
@@ -31,21 +31,22 @@ context Requirement{
 	
 	//d) There are no conflicting requirements with common ancestors.
 	constraint NoConflictsInTree{
-		check : true//self.println().closure(r|r.dependencies).collect(r|r.incomingConflicts.addAll(r.outgoingConflicts)).println()
+		check : self.conflictsIncoming.includingAll(self.conflictsOutgoing).
+				closure(r|r.parents).excludesAll(self.closure(r|r.parents))
 	}
 	
 	
 	//e) Requirements cannot be in conflict and dependency at the same time.
 	constraint ConflictAndDependancie{
-		check : self.closure(r|r.dependencies).
-				excludesAll(self.outgoingConflicts) and
-				self.closure(r|r.dependencies).
-				excludesAll(self.incomingConflicts)
+		check : self.closure(r|r.children).
+				excludesAll(self.conflictsOutgoing) and
+				self.closure(r|r.children).
+				excludesAll(self.conflictsIncoming)
 	}
 	
-	//f) There cannot be any loops in dependencies including self referential dependencies.
+	//f) There cannot be any loops in children including self referential children.
 	constraint DependencyLoops {
-		check : self.closure(r|r.dependencies).excludes(self)
+		check : self.closure(r|r.children).excludes(self)
 	}
 	
 	//g) System Requirements cannot be parents of Customer Requirements.
@@ -60,18 +61,29 @@ context SystemRequirement{
 	constraint SystemRootNodes{
 		check : self.isChild()
 	}
+	// System Requirements can be in conflict with System Requirements only
+	constraint SystemConflicts{
+		check : not self.conflictsOutgoing.exists(r|r.type().name == "CustomerRequirement") and
+				not self.conflictsIncoming.exists(r|r.type().name == "CustomerRequirement")
+	}
+	
 }
 
 operation SystemRequirement isChild(){
-	return Requirement.all.one(r|r.dependencies.contains(self));
+	return Requirement.all.one(r|r.children.contains(self));
 }
 
 	
 context CustomerRequirement{
 	//i) Customer Requirements cannot be leaf nodes.
 	constraint CustomerLeafNodes{
-		check : self.closure(r|r.dependencies).
+		check : self.closure(r|r.children).
 		exists(r|r.type().name == "SystemRequirement")
+	}
+	
+	constraint CustomerConflicts{
+		check : not self.conflictsOutgoing.exists(r|r.type().name == "SystemRequirement") and
+				not self.conflictsIncoming.exists(r|r.type().name == "SystemRequirement")
 	}
 }
 
