@@ -179,16 +179,48 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	 */
 	public Integer getProgress() {
 		
-		if (this.getChildren().size() > 0){
-			progress = 0;
-			for (Requirement requirement : getChildren()){
-				progress += requirement.getProgress();
-			}
-			progress /= getChildren().size();			
-		}
-		
+//		try {
+//			if (this.getChildren().size() > 0){
+//				progress = 0;
+//				for (Requirement requirement : getChildren()){
+//					progress += requirement.getProgress();
+//				}
+//				progress /= getChildren().size();			
+//			}
+//		}
+//		catch(StackOverflowError e){
+//			System.err.println("Circular Requirement Dependencie not allowed.");
+//		}
 		
 		return progress;
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public void updateProgress(){
+		Integer oldProgress = progress;
+		Integer newProgress = 0;
+		
+		for(Requirement child : getChildren()){
+			newProgress += child.getProgress();
+		}
+		
+		newProgress /= getChildren().size();
+		
+		if (oldProgress != newProgress){
+			progress = newProgress;
+			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__PROGRESS, oldProgress, progress));
+			
+			if (getParents().size() >0){
+				for(Requirement parent : getParents()){
+					parent.updateProgress();
+				}
+			}
+		}
+		
 	}
 
 	/**
@@ -197,15 +229,19 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	 * @generated NOT
 	 */
 	public void setProgress(Integer newProgress) {
+		if (getChildren().size() >0){
+			return;
+		}
+		
 		Integer oldProgress = progress;
 		progress = newProgress;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__PROGRESS, oldProgress, progress));
 		
 		// Cause parent to change progress in viewer by calling it's set method
-		if (this.getParents().size() > 0){
-			for (Requirement requirement : getParents()){
-				requirement.setProgress(PROGRESS_EDEFAULT);
+		if (this.getParents().size() > 0 && oldProgress != newProgress){
+			for (Requirement parent : getParents()){
+				parent.updateProgress();
 			}			
 		}
 	}
