@@ -140,18 +140,28 @@ Customer requirements cannot be leaf nodes because they need to have at least on
 \begin{enumerate}
 	\item Requirements
 	\begin{enumerate}
-		\item Requirement identifier should be unique.
-		\item Requirement description should be at least 10 characters long.
-		\item Progress must be between 0 and 100 \%.
-		\item Conflicting requirements with common ancestor should not both contribute to progress average of ancestor.
+		\item Fields
+		\begin{enumerate}
+			\item Requirement identifier should be unique.
+			\item Requirement description should be at least 10 characters long.
+			\item Progress must be between 0 and 100 \%.
+			\item Progress must be equal to average of child requirements if there are any children.
+		\end{enumerate}
 		
-		\item Requirements cannot be in conflict and dependency at the same time.
+		\item Conflicts
+		\begin{enumerate}
+			\item Conflicting requirements cannot have common ancestors.
+			\item Requirements cannot be in conflict and dependency at the same time.
+		\end{enumerate}
 		
-		\item There cannot be any loops in dependencies including self referential dependencies.
+		\item Dependencies
+		\begin{enumerate}
+			\item There cannot be any loops in dependencies including self referential dependencies.
+			\item System Requirements cannot be parents of Customer Requirements.
+			\item System Requirements cannot be root nodes.
+			\item Customer Requirements cannot be leaf nodes.	
+		\end{enumerate}
 		
-		\item System Requirements cannot be parents of Customer Requirements.
-		\item System Requirements cannot be root nodes.
-		\item Customer Requirements cannot be leaf nodes.
 	\end{enumerate}
 	
 	\item Team members
