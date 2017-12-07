@@ -11,6 +11,8 @@
 
 context Requirement{
 
+	//FIELDS
+	
 	//a) Requirement identifier should be unique.
 	constraint UniqueIdentifier{
 		check : Requirement.allInstances().
@@ -29,6 +31,8 @@ context Requirement{
 				self.progress <= 100
 	}
 	
+	//CONFLICTS
+	
 	//d) There are no conflicting requirements with common ancestors.
 	constraint NoConflictsInTree{
 		check : self.conflictsIncoming.includingAll(self.conflictsOutgoing).
@@ -44,13 +48,14 @@ context Requirement{
 				excludesAll(self.conflictsIncoming)
 	}
 	
+	
+	//DEPENDENCIES
 	//f) There cannot be any loops in children including self referential children.
 	constraint DependencyLoops {
 		check : self.closure(r|r.children).excludes(self)
 	}
 	
-	//g) System Requirements cannot be parents of Customer Requirements.
-	// Enforced by metamodel
+
 	
 }
 
@@ -59,32 +64,29 @@ context Requirement{
 context SystemRequirement{
 	//h) System Requirements cannot be root nodes.
 	constraint SystemRootNodes{
-		check : self.isChild()
-	}
-	// System Requirements can be in conflict with System Requirements only
-	constraint SystemConflicts{
-		check : not self.conflictsOutgoing.exists(r|r.type().name == "CustomerRequirement") and
-				not self.conflictsIncoming.exists(r|r.type().name == "CustomerRequirement")
+		check : self.parents.size() > 0
 	}
 	
-}
-
-operation SystemRequirement isChild(){
-	return Requirement.all.one(r|r.children.contains(self));
+	// System requirements cannot be parents of Customer Requirements
+	constraint SystemParentOfCustomer {
+		check : self.children.exists(r|r.type().name = 'CustomerRequirement')
+	}
+	
+	// System Requirements can be in conflict with System Requirements only
+		// Enforced by metamodel
+	
 }
 
 	
 context CustomerRequirement{
 	//i) Customer Requirements cannot be leaf nodes.
 	constraint CustomerLeafNodes{
-		check : self.closure(r|r.children).
-		exists(r|r.type().name == "SystemRequirement")
+		check : self.children.size() > 0
 	}
 	
-	constraint CustomerConflicts{
-		check : not self.conflictsOutgoing.exists(r|r.type().name == "SystemRequirement") and
-				not self.conflictsIncoming.exists(r|r.type().name == "SystemRequirement")
-	}
+	// Customer Requirements can be in conflict with Customer Requirements only
+		// Enforced by metamodel
+
 }
 
 
