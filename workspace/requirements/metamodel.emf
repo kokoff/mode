@@ -11,7 +11,7 @@ class Model{
 
 @gmf.node(label="identifier")
 abstract class Requirement{
-	id attr String identifier;
+	attr String identifier;
 	@gmf.label(label.text="Description")
 	attr String description="";
 	@gmf.label(label.text="0")
@@ -20,6 +20,8 @@ abstract class Requirement{
 	@gmf.link(label="dependency", tool.name = "Dependency", target.decoration="arrow")
 	ref Requirement[*]#parents children;
 	ref Requirement[*]#children parents;
+	
+	op void updateProgress();
 }
 
 

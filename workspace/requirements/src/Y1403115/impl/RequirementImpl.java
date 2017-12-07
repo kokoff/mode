@@ -9,12 +9,14 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -110,14 +112,36 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	 * @ordered
 	 */
 	protected EList<Requirement> parents;
+	
+	
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected RequirementImpl() {
 		super();
+		
+		eAdapters().add(new AdapterImpl(){
+			
+			@Override
+			public void notifyChanged(Notification msg){
+				
+				int feature = msg.getFeatureID(msg.getNotifier().getClass());
+				if (feature == Y1403115Package.CUSTOMER_REQUIREMENT__PROGRESS){
+					for (Requirement parent : ((Requirement) msg.getNotifier()).getParents()){
+						parent.updateProgress();
+					}
+				}
+				else if (feature == Y1403115Package.CUSTOMER_REQUIREMENT__CHILDREN){
+					((Requirement) msg.getNotifier()).updateProgress();
+				}
+				
+				
+				super.notifyChanged(msg);
+			}
+		});
 	}
 
 	/**
@@ -171,57 +195,20 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__DESCRIPTION, oldDescription, description));
 	}
+	
+	
+	
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	public Integer getProgress() {
-		
-//		try {
-//			if (this.getChildren().size() > 0){
-//				progress = 0;
-//				for (Requirement requirement : getChildren()){
-//					progress += requirement.getProgress();
-//				}
-//				progress /= getChildren().size();			
-//			}
-//		}
-//		catch(StackOverflowError e){
-//			System.err.println("Circular Requirement Dependencie not allowed.");
-//		}
-		
 		return progress;
 	}
 	
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public void updateProgress(){
-		Integer oldProgress = progress;
-		Integer newProgress = 0;
-		
-		for(Requirement child : getChildren()){
-			newProgress += child.getProgress();
-		}
-		
-		newProgress /= getChildren().size();
-		
-		if (oldProgress != newProgress){
-			progress = newProgress;
-			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__PROGRESS, oldProgress, progress));
-			
-			if (getParents().size() >0){
-				for(Requirement parent : getParents()){
-					parent.updateProgress();
-				}
-			}
-		}
-		
-	}
+	
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -229,7 +216,7 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	 * @generated NOT
 	 */
 	public void setProgress(Integer newProgress) {
-		if (getChildren().size() >0){
+		if (this.getChildren().size() > 0){
 			return;
 		}
 		
@@ -237,13 +224,6 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 		progress = newProgress;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__PROGRESS, oldProgress, progress));
-		
-		// Cause parent to change progress in viewer by calling it's set method
-		if (this.getParents().size() > 0 && oldProgress != newProgress){
-			for (Requirement parent : getParents()){
-				parent.updateProgress();
-			}			
-		}
 	}
 
 	/**
@@ -268,6 +248,31 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 			parents = new EObjectWithInverseResolvingEList.ManyInverse<Requirement>(Requirement.class, this, Y1403115Package.REQUIREMENT__PARENTS, Y1403115Package.REQUIREMENT__CHILDREN);
 		}
 		return parents;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public void updateProgress() {
+		if (getChildren().size() <= 0){
+			return;
+		}
+		
+		Integer oldProgress = progress;
+		Integer newProgress = 0;
+		
+		for(Requirement child : getChildren()){
+			newProgress += child.getProgress();
+		}
+		newProgress /= getChildren().size();
+		
+		if (oldProgress != newProgress){
+			progress = newProgress;
+			
+			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__PROGRESS, oldProgress, newProgress));
+		}
 	}
 
 	/**
