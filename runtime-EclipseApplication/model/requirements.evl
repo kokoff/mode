@@ -1,4 +1,4 @@
-//a) Requirement identifier should be unique.
+//a) Requirement id should be unique.
 //b) Requirement description should be at least 10 characters long.
 //c) Progress must be between 0 and 100 %.
 //d) Conflicting requirements with common ancestor should not contribute to progress average.
@@ -9,85 +9,242 @@
 //i) Customer Requirements cannot be leaf nodes.
 
 
-context Requirement{
+context Identifiable{
 
 	//FIELDS
 	
-	//a) Requirement identifier should be unique.
-	constraint UniqueIdentifier{
-		check : Requirement.allInstances().
-				one(r|r.identifier == self.identifier)
-	}
+	// Requirement id should be unique.
+	constraint Uniqueid{
+		guard : not self.~idChecked.isDefined()
+		
+		check {
+				
+				var duplicates = Identifiable.allInstances().select(r|r.id == self.id and r <> self
+								and (r.type()==self.type() or r.isKindOf(Requirement) and self.isKindOf(Requirement)) );
+				
+				for (i in duplicates){
+					i.~idChecked=true;
+				}
+				
+				return duplicates.isEmpty();
+				
+		}
+				
+		message :  "The id of " + self.type().name + " " + self.id + " is not unique."
+		
+		fix {
+			title : "Generate unique ids for all duplicates!"
+			
+			do{
+				for (duplicate in duplicates){
+					var i = 1;
+					var type = duplicate.type().name.asString();
+					var id = duplicate.type().name.asString() + i.asString();
+					
+					while (Identifiable.allInstances().
+							exists(r|r.id == id))	{
+							i = i+1;
+							id = type + i.asString();
+					}
+					duplicate.id = id;
+				}
+				
+			}
+		}
+	}	
+}
+
+
+context Requirement{
 	
-	//b) Requirement description should be at least 10 characters long.
+	// Requirement description should be at least 10 characters long.
 	constraint RequirementDescriptionLength{
-		guard : self.description.isDefined()
 		check : self.description.length() > 10
+		
+		message : "Description of requirement " + self.id + " is not at least 10 characters long." 
 	}
 	
-	//c) Progress must be between 0 and 100 %.
+	// Progress must be between 0 and 100 %.
 	constraint ProgressIsPercentage{
 		check : self.progress >=0 and
 				self.progress <= 100
+				
+		message : "Progress of requirement " + self.id + " is not a valid percantage (0 <= progress <= 100)."
 	}
 	
 	//CONFLICTS
 	
-	//d) There are no conflicting requirements with common ancestors.
+	// There are no conflicting requirements with common ancestors.
 	constraint NoConflictsInTree{
-		check : self.conflictsIncoming.includingAll(self.conflictsOutgoing).
-				closure(r|r.parents).excludesAll(self.closure(r|r.parents))
-	}
 	
-	
-	//e) Requirements cannot be in conflict and dependency at the same time.
-	constraint ConflictAndDependancie{
-		check : self.closure(r|r.children).
-				excludesAll(self.conflictsOutgoing) and
-				self.closure(r|r.children).
-				excludesAll(self.conflictsIncoming)
-	}
-	
-	
-	//DEPENDENCIES
-	//f) There cannot be any loops in children including self referential children.
-	constraint DependencyLoops {
-		check : self.closure(r|r.children).excludes(self)
+		check { 
+			var ancestors = self.closure(r|r.parents);	// collect all ancestors
+			
+			// incoming conflicting requirements which are in the same tree and have not been checked
+			var incomingConflictsInTree = self.conflictsIncoming.select(d| 
+			d.closure(r|r.parents).including(d).exists(r| ancestors.includes(r)) 
+			and not d.~conflictsChecked.isDefined()).asSet(); 
+			
+			// outgoing conflicting requirements which are in the same tree and have not been checked
+			var outgoingConflictsInTree = self.conflictsOutgoing.select(d| 
+			d.closure(r|r.parents).including(d).exists(r| ancestors.includes(r)) 
+			and not d.~conflictsChecked.isDefined()).asSet();
+			
+			self.~conflictsChecked = true;
+			
+			return incomingConflictsInTree.isEmpty() and
+			outgoingConflictsInTree.isEmpty();
+		}
+				
+		message : "Requirement " + self.id + " cannot be in conflict with the requirements in the " +
+				incomingConflictsInTree.includingAll(outgoingConflictsInTree).
+				collect(r|r.id).asString() +
+				" because they are in the same tree."
+				
+		fix {
+			title : "Remove problematic conflicts"
+			
+			do {
+				self.conflictsIncoming.removeAll(incomingConflictsInTree);
+				self.conflictsOutgoing.removeAll(outgoingConflictsInTree);
+			}
+		}
 	}
 	
 
+	//DEPENDENCIES
 	
+	// There cannot be any loops in children including self referential children.
+	constraint DependencyLoops {
+		check : self.closure(r|r.children).excludes(self)
+		
+		message : "Requirement " + self.id + " is part of a dependency loop!"
+	}
 }
 
 
 
 context SystemRequirement{
-	//h) System Requirements cannot be root nodes.
+	// System Requirements cannot be root nodes.
 	constraint SystemRootNodes{
-		check : self.parents.size() > 0
+		check : self.parents.notEmpty()
+		
+		message : "Requiremwnt " + self.id + " must be a descendant of a CustomerRequirement!"
+		
+		fix{
+			title : "Remove requirement " + self.id
+			
+			do {
+				self.eContainer().requirements.remove(self);
+			}
+		}
 	}
 	
 	// System requirements cannot be parents of Customer Requirements
 	constraint SystemParentOfCustomer {
-		check : self.children.exists(r|r.type().name = 'CustomerRequirement')
+		check { var customerChildren = self.children.select(r|
+				r.type().name = 'CustomerRequirement');
+				return customerChildren.isEmpty();			
+			  }
+	
+		message : "Requiremwnt " + self.id + " cannot be a parent of the customer requirements in the " +
+					customerChildren.collect(r|r.id).asString()
+					
+		fix{
+			title : "Remove customer requirements from children"
+			
+			do { 
+				self.children.removeAll(customerChildren);
+			}
+		}
 	}
-	
-	// System Requirements can be in conflict with System Requirements only
-		// Enforced by metamodel
-	
 }
 
 	
 context CustomerRequirement{
-	//i) Customer Requirements cannot be leaf nodes.
+	// Customer Requirements cannot be leaf nodes.
 	constraint CustomerLeafNodes{
-		check : self.children.size() > 0
+		check : self.children.notEmpty()
+		
+		message : "Customer requirement " + self.id + " must have at least one system requirement descendant!" 
+		
+		fix {
+			title : "Remove requirement " + self.id
+			
+			do {
+				self.eContainer().requirements.remove(self);
+			}
+		}
+	}
+}
+
+
+
+context TestCase{
+	// Each test case verifies at least one system requirement
+	constraint VerifiesAtLeastOne{
+		check : self.requirements.notEmpty()
+		
+		message : "Test case " + self.id + " needs to verify at least one system requirement!"
+		
+		fix {
+			title : "Remove test case " + self.id
+			
+			do{
+				self.eContainer().testCases.remove(self);
+			}
+		}
 	}
 	
-	// Customer Requirements can be in conflict with Customer Requirements only
-		// Enforced by metamodel
-
+	// A test case cannot verrify the same requirement twice (e.g. a requirement and it's ancestor)
+	constraint NotVerifyRequirementAndAncestor{
+		
+		check {
+			var requirementDescendants = self.requirements.closure(d|d.children);
+			var duplicates = self.requirements.select(r| requirementDescendants.contains(r));
+			return duplicates.isEmpty();
+		}
+		
+		message : "Test case " + self.id + " cannot verify a requirement and it's ancestor" + 
+					" because this implies verifying the requirement twice!"
+					
+		fix {
+			title : "Remove child requirement from test case"
+			
+			do {
+				self.requirements.removeAll(duplicates);
+			}
+		}
+	}
 }
+
+
+
+
+context TeamMember{
+
+	// A team member cannot be assigned the same requirement twice (e.g. a requirement and it's ancestor)
+	constraint NotVerifyRequirementAndAncestor{
+		
+		check {
+			var requirementDescendants = self.requirements.closure(d|d.children);
+			var duplicates = self.requirements.select(r| requirementDescendants.contains(r));
+			return duplicates.isEmpty();
+		}
+		
+		message : "Team member " + self.id + " cannot be assigned a requirement and it's ancestor" + 
+					" because this implies being assigned the requirement twice!"
+					
+		fix {
+			title : "Remove child requirement from team members requirements"
+			
+			do {
+				self.requirements.removeAll(duplicates);
+			}
+		}
+	}
+}
+
 
 
 

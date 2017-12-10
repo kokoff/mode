@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="ASCII"?>
-<Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://requirements" xmi:id="_h2JZoNXGEee5k-Spsmc4wQ">
-  <requirements xsi:type="CustomerRequirement" xmi:id="_bEjwANaVEeej_-rljoh67w" Cdependencies="_b03yoNaVEeej_-rljoh67w"/>
-  <requirements xsi:type="CustomerRequirement" xmi:id="_b03yoNaVEeej_-rljoh67w" identifier="1"/>
-</Model>
