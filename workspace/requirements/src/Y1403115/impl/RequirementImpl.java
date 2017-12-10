@@ -2,23 +2,21 @@
  */
 package Y1403115.impl;
 
-import Y1403115.Requirement;
-import Y1403115.Y1403115Package;
-
+import Y1403115.Describable;
 import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import Y1403115.Requirement;
+import Y1403115.Y1403115Package;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,7 +26,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link Y1403115.impl.RequirementImpl#getIdentifier <em>Identifier</em>}</li>
  *   <li>{@link Y1403115.impl.RequirementImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link Y1403115.impl.RequirementImpl#getProgress <em>Progress</em>}</li>
  *   <li>{@link Y1403115.impl.RequirementImpl#getChildren <em>Children</em>}</li>
@@ -37,27 +34,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public abstract class RequirementImpl extends EObjectImpl implements Requirement {
-	/**
-	 * The default value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getIdentifier()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String IDENTIFIER_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getIdentifier() <em>Identifier</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getIdentifier()
-	 * @generated
-	 * @ordered
-	 */
-	protected String identifier = IDENTIFIER_EDEFAULT;
-
+public abstract class RequirementImpl extends IdentifiableImpl implements Requirement {
 	/**
 	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -66,7 +43,7 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String DESCRIPTION_EDEFAULT = "";
+	protected static final String DESCRIPTION_EDEFAULT = "The description goes here.";
 
 	/**
 	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
@@ -129,15 +106,17 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 			public void notifyChanged(Notification msg){
 				
 				int feature = msg.getFeatureID(msg.getNotifier().getClass());
-				if (feature == Y1403115Package.CUSTOMER_REQUIREMENT__PROGRESS){
-					for (Requirement parent : ((Requirement) msg.getNotifier()).getParents()){
-						parent.updateProgress();
+				
+				switch (feature){
+					case Y1403115Package.CUSTOMER_REQUIREMENT__PROGRESS : {
+						for (Requirement parent : ((Requirement) msg.getNotifier()).getParents()){
+							parent.updateProgress();
+						}
+					}
+					case Y1403115Package.CUSTOMER_REQUIREMENT__CHILDREN : {
+						((Requirement) msg.getNotifier()).updateProgress();
 					}
 				}
-				else if (feature == Y1403115Package.CUSTOMER_REQUIREMENT__CHILDREN){
-					((Requirement) msg.getNotifier()).updateProgress();
-				}
-				
 				
 				super.notifyChanged(msg);
 			}
@@ -152,27 +131,6 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	@Override
 	protected EClass eStaticClass() {
 		return Y1403115Package.Literals.REQUIREMENT;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getIdentifier() {
-		return identifier;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setIdentifier(String newIdentifier) {
-		String oldIdentifier = identifier;
-		identifier = newIdentifier;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__IDENTIFIER, oldIdentifier, identifier));
 	}
 
 	/**
@@ -195,9 +153,6 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, Y1403115Package.REQUIREMENT__DESCRIPTION, oldDescription, description));
 	}
-	
-	
-	
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -316,8 +271,6 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case Y1403115Package.REQUIREMENT__IDENTIFIER:
-				return getIdentifier();
 			case Y1403115Package.REQUIREMENT__DESCRIPTION:
 				return getDescription();
 			case Y1403115Package.REQUIREMENT__PROGRESS:
@@ -339,9 +292,6 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case Y1403115Package.REQUIREMENT__IDENTIFIER:
-				setIdentifier((String)newValue);
-				return;
 			case Y1403115Package.REQUIREMENT__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
@@ -368,9 +318,6 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case Y1403115Package.REQUIREMENT__IDENTIFIER:
-				setIdentifier(IDENTIFIER_EDEFAULT);
-				return;
 			case Y1403115Package.REQUIREMENT__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
@@ -395,8 +342,6 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case Y1403115Package.REQUIREMENT__IDENTIFIER:
-				return IDENTIFIER_EDEFAULT == null ? identifier != null : !IDENTIFIER_EDEFAULT.equals(identifier);
 			case Y1403115Package.REQUIREMENT__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 			case Y1403115Package.REQUIREMENT__PROGRESS:
@@ -415,13 +360,43 @@ public abstract class RequirementImpl extends EObjectImpl implements Requirement
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == Describable.class) {
+			switch (derivedFeatureID) {
+				case Y1403115Package.REQUIREMENT__DESCRIPTION: return Y1403115Package.DESCRIBABLE__DESCRIPTION;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == Describable.class) {
+			switch (baseFeatureID) {
+				case Y1403115Package.DESCRIBABLE__DESCRIPTION: return Y1403115Package.REQUIREMENT__DESCRIPTION;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (identifier: ");
-		result.append(identifier);
-		result.append(", description: ");
+		result.append(" (description: ");
 		result.append(description);
 		result.append(", progress: ");
 		result.append(progress);
