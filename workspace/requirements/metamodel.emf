@@ -25,7 +25,7 @@ abstract class Requirement extends Identifiable, Describable{
 	@gmf.label()
 	attr Integer progress=0;
 	
-	@gmf.link(label="dependency", color="0,0,0", 
+	@gmf.link(color="0,0,0", 
 	tool.name = "Dependency", target.decoration="arrow")
 	ref Requirement[*]#parents children;
 	ref Requirement[*]#children parents;
@@ -36,7 +36,7 @@ abstract class Requirement extends Identifiable, Describable{
 
 @gmf.node(border.color="0,0,255")
 class CustomerRequirement extends Requirement{
-	@gmf.link(label="conflict", style="dash", color="0,0,255",
+	@gmf.link(style="dash", color="0,0,255",
 		tool.name="Customer Requirement Conflict")
 	ref CustomerRequirement[*]#conflictsIncoming conflictsOutgoing;
 	ref CustomerRequirement[*]#conflictsOutgoing conflictsIncoming;
@@ -45,24 +45,26 @@ class CustomerRequirement extends Requirement{
 
 @gmf.node(border.color="255,0,0")
 class SystemRequirement extends Requirement{
-	@gmf.link(label="conflict", style="dash", 
+	@gmf.link(style="dash", 
 		tool.name="System Requirement Conflict", color="255,0,0")
 	ref SystemRequirement[*]#conflictsIncoming conflictsOutgoing;
 	ref SystemRequirement[*]#conflictsOutgoing conflictsIncoming;
+	
+	ref TestCase[*]#requirements testCases;
 }
 
 
 @gmf.node(border.color="255,255,0")
 class TestCase extends Identifiable, Describable{
-	@gmf.link(label="verifies", color="255,255,0", 
+	@gmf.link(color="255,255,0", 
 		tool.name="Verifies")
-	ref SystemRequirement[1..*]  requirements;
+	ref SystemRequirement[1..*]#testCases  requirements;
 }
 
 
 @gmf.node(border.color="0,255,0")
 class TeamMember extends Identifiable{
-	@gmf.link(label="assigned", color="0,255,0", 
+	@gmf.link(color="0,255,0", 
 		tool.name="Assigned")
 	ref Requirement[*] requirements;
 }
