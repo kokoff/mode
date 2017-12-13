@@ -106,17 +106,15 @@ public abstract class RequirementImpl extends IdentifiableImpl implements Requir
 			public void notifyChanged(Notification msg){
 				
 				int feature = msg.getFeatureID(msg.getNotifier().getClass());
-				
-				switch (feature){
-					case Y1403115Package.CUSTOMER_REQUIREMENT__PROGRESS : {
-						for (Requirement parent : ((Requirement) msg.getNotifier()).getParents()){
-							parent.updateProgress();
-						}
-					}
-					case Y1403115Package.CUSTOMER_REQUIREMENT__CHILDREN : {
-						((Requirement) msg.getNotifier()).updateProgress();
+				if (feature == Y1403115Package.CUSTOMER_REQUIREMENT__PROGRESS){
+					for (Requirement parent : ((Requirement) msg.getNotifier()).getParents()){
+						parent.updateProgress();
 					}
 				}
+				else if (feature == Y1403115Package.CUSTOMER_REQUIREMENT__CHILDREN){
+					((Requirement) msg.getNotifier()).updateProgress();
+				}
+				
 				
 				super.notifyChanged(msg);
 			}
