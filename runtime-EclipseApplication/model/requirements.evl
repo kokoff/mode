@@ -66,10 +66,25 @@ context Requirement{
 	
 	// Progress must be between 0 and 100 %.
 	constraint ProgressIsPercentage{
+		guard : self.children.isEmpty()
+	
 		check : self.progress >=0 and
 				self.progress <= 100
 				
 		message : "Progress of requirement " + self.id + " is not a valid percantage (0 <= progress <= 100)."
+		
+		fix {
+			title : "Round to nearest valid percentage (0 or 100)"
+			
+			do {
+				if (self.progress < 0){
+					self.progress = 0;
+				}
+				else if (self.progress > 100){
+					self.progress = 100;
+				}
+			}
+		}
 	}
 	
 	//CONFLICTS
