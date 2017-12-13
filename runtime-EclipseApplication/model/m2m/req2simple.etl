@@ -1,0 +1,64 @@
+pre {
+	var m = new Out!Model;
+}
+
+rule CustomerRequirements2CompletedRequirements
+	transform r : In!CustomerRequirement
+	to s : Out!CustomerRequirement{
+	
+	guard : r.progress < 100
+	
+	s.id = r.id;
+	s.progress = r.progress;
+	s.description = r.description;
+	s.conflictsOutgoing = r.conflictsOutgoing.select(d|d.progress < 100).equivalent();
+	s.conflictsIncoming = r.conflictsIncoming.select(d|d.progress < 100).equivalent();
+	s.parents = r.parents.select(d|d.progress < 100).equivalent();
+	s.children = r.children.select(d|d.progress < 100).equivalent();
+	
+	m.requirements.add(s);
+}
+
+rule SystemRequirements2CompletedRequirements
+	transform r : In!SystemRequirement
+	to s : Out!SystemRequirement{
+	
+	guard : r.progress < 100
+	
+	s.id = r.id;
+	s.progress = r.progress;
+	s.description = r.description;
+	s.conflictsOutgoing = r.conflictsOutgoing.select(d|d.progress < 100).equivalent();
+	s.conflictsIncoming = r.conflictsIncoming.select(d|d.progress < 100).equivalent();
+	s.parents = r.parents.select(d|d.progress < 100).equivalent();
+	s.children = r.children.select(d|d.progress < 100).equivalent();
+	s.testCases = r.testCases.equivalent();
+	
+	m.requirements.add(s);
+}
+
+rule TestCase2TestCase
+	transform tc1 : In!TestCase
+	to tc2 : Out!TestCase{
+	
+	guard : tc1.requirements.exists(r|r.progress < 100)
+	
+	tc2.id = tc1.id;
+	tc2.description = tc1.description;
+	tc2.requirements = tc2.requirements.equivalent();
+	
+	m.testCases.add(tc2);
+}
+	
+rule TeamMember2TeamMember
+	transform tm1 : In!TeamMember
+	to tm2 : Out!TeamMember {
+	
+	guard : tm1.requirements.exists(r|r.progress < 100)
+	
+	tm2.id = tm1.id;
+	tm2.requirements = tm1.requirements.equivalent();
+	
+	m.teamMembers.add(tm2);	
+}	
+	
