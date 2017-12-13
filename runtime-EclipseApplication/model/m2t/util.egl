@@ -1,0 +1,28 @@
+[%operation Identifiable toLink(){%]
+	<a href = [%=self.~link%] > [%=self.id%] </a>
+[%}%]
+
+
+
+[%operation Requirement treeToHTML() {%]	
+
+	[%=self.toLink()%]
+	
+	<ul>
+	
+	[%for (req in self.children){%]
+		<li> [%=req.treeToHTML()%]
+	[%}%]
+		
+	</ul>
+[%}%]
+
+
+
+[%operation OrderedSet toTree() {%]
+	<ul>
+	[%for (r in self){%]
+		<li> [%=r.treeToHTML()%]
+	[%}%]
+	</ul>
+[%}%]

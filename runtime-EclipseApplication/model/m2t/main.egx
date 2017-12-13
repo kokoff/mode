@@ -1,0 +1,47 @@
+rule SystemRequirement2Page
+
+transform requirement : SystemRequirement{
+		
+	template : "requirement2page.egl"
+	
+	target : "gen/" + requirement.id + ".html"
+}
+
+rule CustomerRequirement2Page
+
+transform requirement : CustomerRequirement{
+	
+	template : "requirement2page.egl"
+	
+	target : "gen/" + requirement.id + ".html"
+
+}
+
+rule TestCase2Page
+
+transform testCase : TestCase{
+	
+	template : "testCase2page.egl"
+	
+	target : "gen/" + testCase.id + ".html"
+
+}
+
+rule TeamMember2Page
+
+transform teamMember : TeamMember{
+	
+	template : "teamMember2page.egl"
+	
+	target : "gen/" + teamMember.id + ".html"
+
+}
+
+rule Model2Index
+
+transform requirementsModel : Model {
+
+	template : "model2index.egl"
+	
+	target : "gen/" + "index.html"
+}

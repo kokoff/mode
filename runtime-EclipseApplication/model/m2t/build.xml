@@ -1,0 +1,47 @@
+<project default="main">
+  
+  <target name="main">
+  	
+  	<!--Load the Default model-->
+    <epsilon.emf.loadModel name="Main"
+      modelfile="../default.y1403115"
+      metamodeluri="http://requirements"
+      read="true" store="false"/>
+    
+  	<!--Load the Simplified model-->
+    <epsilon.emf.loadModel name="Simplified"
+      modelfile="simplified.y1403115"
+      metamodeluri="http://requirements"
+      read="false" store="false"/>
+  	
+  	<!--Run the validation on the Default model-->
+  	<epsilon.evl src="../requirements.evl">
+  		<parameter name="dir" value="gen1"/>
+  		<model ref="Main"/>
+  	</epsilon.evl>
+  	
+  	<!--Run the Default -> Simplified M2M transformation-->
+    <epsilon.etl src="../m2m/req2simple.etl">
+      <model ref="Main" as="In"/>
+      <model ref="Simplified" as="Out" />
+    </epsilon.etl>
+  	
+    <!--Run the Default -> HTML M2T transformation-->
+    <epsilon.egl src="main.egl" outputroot="gen">
+    	<parameter name="suffix" value=""/>
+    	<parameter name="otherSuffix" value="other"/>
+    	<parameter name="message" value="Show only non completed requirements"/>
+      <model ref="Main"/>
+    </epsilon.egl>
+    
+  	<!--Run the Default -> HTML M2T transformation-->
+    <epsilon.egl src="main.egl" outputroot="gen">
+    	<parameter name="suffix" value="other"/>
+    	<parameter name="otherSuffix" value=""/>
+    	<parameter name="message" value="Show all requirements"/>
+      <model ref="Simplified"/>
+    </epsilon.egl>
+  	  	
+  </target>
+
+</project>

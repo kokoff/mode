@@ -1,0 +1,50 @@
+[%
+
+var requirementsModel = Model.all.first();
+
+requirementsModel.~link = "index" + suffix + '.html';
+requirementsModel.~alternativeLink = "index" + otherSuffix + ".html"; 
+requirementsModel.~alternativeLinkText = message; 
+
+for (identifiable in Identifiable.all){
+	identifiable.~link = identifiable.id + suffix + ".html";	
+}
+
+generateWebsite(requirementsModel);
+
+operation generateWebsite (requirementsModel : Model) {
+	
+	var requirementTemplate : Template;
+	for (requirement in requirementsModel.requirements) {
+	
+		requirementTemplate = TemplateFactory.load("requirement2page.egl");
+		requirementTemplate.populate("requirement", requirement);
+		requirementTemplate.generate(requirement.~link);
+	}
+
+	var testCaseTemplate : Template;
+	for (testCase in requirementsModel.testCases) {
+	
+		testCaseTemplate = TemplateFactory.load("testCase2page.egl");
+		testCaseTemplate.populate("testCase", testCase);
+		testCaseTemplate.generate(testCase.~link);
+	}
+
+	var teamMemberTemplate : Template;
+	for (teamMember in requirementsModel.teamMembers) {
+		
+		teamMemberTemplate = TemplateFactory.load("teamMember2page.egl");
+		teamMemberTemplate.populate("teamMember", teamMember);
+		teamMemberTemplate.generate(teamMember.~link);
+	}
+
+	var indexTemplate : Template = TemplateFactory.load("model2index.egl");
+		
+	indexTemplate.populate("requirementsModel", requirementsModel);
+	indexTemplate.generate(requirementsModel.~link);
+}
+
+%]
+
+
+

@@ -1,0 +1,52 @@
+[% import 'util.egl' ;%]
+[% out.setContentType("HTML"); %]
+
+
+
+
+<html>
+<head>
+</head>
+
+<body>
+
+<a href="[%=requirement.eContainer().~alternativeLink%]" > [%=requirement.eContainer().~alternativeLinkText%] </a>
+
+<h1>[%=requirement.id%]</h1>
+
+<h3>Description</h3>
+<p>[%=requirement.description%]</p>
+
+<h3>Progress</h3>
+<meter value="[%=requirement.progress%]" max="100"></meter>
+
+<h3>Parents</h3>
+[%for (r in requirement.parents){%]
+[%=r.toLink()%]
+[%}%]
+
+<h3>Children</h3>
+[%for (r in requirement.children){%]
+[%=r.toLink()%]
+[%}%]
+
+<h3>Conflicts</h3>
+[%for (r in requirement.conflictsIncoming){%]
+[%=r.toLink()%]
+[%}%]
+
+[%for (r in requirement.conflictsOutgoing){%]
+[%=r.toLink()%]
+[%}%]
+
+
+[%if (requirement.type().name == "SystemRequirement") {%]
+	<h3>Test Cases</h3>
+	[%for (tc in requirement.testCases){%]
+	[%=tc.toLink()%]
+	[%}%]
+[%}%]
+
+</body>
+</html>
+

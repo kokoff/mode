@@ -1,0 +1,24 @@
+[% import 'util.egl' ;%]
+[% out.setContentType("HTML"); %]
+
+<html>
+<head>
+</head>
+
+<body>
+<a href="[%=testCase.eContainer().~alternativeLink%]" > [%=testCase.eContainer().~alternativeLinkText%] </a>
+
+
+<h1>[%=testCase.id%]</h1>
+
+<h3>Description</h3>
+<p>[%=testCase.description%]</p>
+
+<h3>Verifies</h3>
+[%for (r in testCase.requirements){%]
+[%=r.toLink()%]
+[%}%]
+
+</body>
+</html>
+

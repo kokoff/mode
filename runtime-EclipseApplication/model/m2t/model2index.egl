@@ -1,0 +1,70 @@
+[% import 'util.egl';%]
+[% out.setContentType("HTML"); %]
+
+<html>
+<head>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+
+<body>
+<a href="[%=requirementsModel.~alternativeLink%]" > [%=requirementsModel.~alternativeLinkText%] </a>
+
+<h1>Requirements Tree</h1>
+[%=requirementsModel.requirements.select(d| d.parents.isEmpty()).toTree()%]
+
+</ul>
+
+<h1>Test Cases</h1>
+
+<table>
+<tr>
+	<th>Test Case</th>
+	<th>Description</th>
+	<th>Verified Requirements</th>
+</tr>
+
+[%for (tc in requirementsModel.testCases) {%]
+<tr>
+	<td>[%=tc.toLink()%]</td>
+	<td>[%=tc.description%]</td>
+	<td>[%=tc.requirements.toTree()%]</td>
+</tr>
+[%}%]
+</table>
+
+
+<h1>Team Members</h1>
+<table>
+<tr>
+	<th>Test Case</th>
+	<th>Assigned Requirements</th>
+</tr>
+
+[%for (tm in requirementsModel.teamMembers) {%]
+<tr>
+	<td>[%=tm.toLink()%]</td>
+	<td>[%=tm.requirements.toTree()%]</td>
+</tr>
+[%}%]
+</table>
+
+</body>
+</html>
+
+
+
