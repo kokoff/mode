@@ -6,6 +6,9 @@
 </head>
 
 <body>
+
+<a href="[%=testCase.eContainer().~link%]" > Home </a> 
+|
 <a href="[%=testCase.eContainer().~alternativeLink%]" > [%=testCase.eContainer().~alternativeLinkText%] </a>
 
 
@@ -15,9 +18,9 @@
 <p>[%=testCase.description%]</p>
 
 <h3>Verifies</h3>
-[%for (r in testCase.requirements){%]
-[%=r.toLink()%]
-[%}%]
+
+[%=testCase.requirements.toList()%]
+
 
 </body>
 </html>

@@ -10,7 +10,7 @@
 	
 	<ul>
 	
-	[%for (req in self.children){%]
+	[%for (req in self.children.sortBy(r|r.id)){%]
 		<li> [%=req.treeToHTML()%]
 	[%}%]
 		
@@ -20,9 +20,26 @@
 
 
 [%operation OrderedSet toTree() {%]
-	<ul>
-	[%for (r in self){%]
-		<li> [%=r.treeToHTML()%]
+	[%if (self.notEmpty()){%]
+		<ul>
+		[%for (r in self.sortBy(r|r.id)){%]
+			<li> [%=r.treeToHTML()%]
+		[%}%]
+		</ul>
+	[%}else{%]
+		None
 	[%}%]
-	</ul>
+[%}%]
+
+
+[%operation OrderedSet toList() {%]
+	[%if (self.notEmpty()){%]
+		<table><tr>
+		[%for (r in self.sortBy(r|r.id)){%]
+			<td> [%=r.toLink()%] </td>
+		[%}%]
+		</table></tr>
+	[%}else{%]
+		None
+	[%}%]
 [%}%]

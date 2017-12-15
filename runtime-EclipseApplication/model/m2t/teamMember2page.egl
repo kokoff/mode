@@ -6,15 +6,17 @@
 </head>
 
 <body>
+
+<a href="[%=teamMember.eContainer().~link%]" > Home </a> 
+|
 <a href="[%=teamMember.eContainer().~alternativeLink%]" > [%=teamMember.eContainer().~alternativeLinkText%] </a>
 
 
 <h1>[%=teamMember.id%]</h1>
 
 <h3>Assigned Requirements</h3>
-[%for (r in teamMember.requirements){%]
-[%=r.toLink()%]
-[%}%]
+[%=teamMember.requirements.toList()%]
+
 
 </body>
 </html>

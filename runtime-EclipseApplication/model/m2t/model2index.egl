@@ -24,10 +24,10 @@ tr:nth-child(even) {
 <body>
 <a href="[%=requirementsModel.~alternativeLink%]" > [%=requirementsModel.~alternativeLinkText%] </a>
 
+
 <h1>Requirements Tree</h1>
 [%=requirementsModel.requirements.select(d| d.parents.isEmpty()).toTree()%]
 
-</ul>
 
 <h1>Test Cases</h1>
 
@@ -38,7 +38,7 @@ tr:nth-child(even) {
 	<th>Verified Requirements</th>
 </tr>
 
-[%for (tc in requirementsModel.testCases) {%]
+[%for (tc in requirementsModel.testCases.sortBy(r|r.id)) {%]
 <tr>
 	<td>[%=tc.toLink()%]</td>
 	<td>[%=tc.description%]</td>
@@ -55,7 +55,7 @@ tr:nth-child(even) {
 	<th>Assigned Requirements</th>
 </tr>
 
-[%for (tm in requirementsModel.teamMembers) {%]
+[%for (tm in requirementsModel.teamMembers.sortBy(r|r.id)) {%]
 <tr>
 	<td>[%=tm.toLink()%]</td>
 	<td>[%=tm.requirements.toTree()%]</td>

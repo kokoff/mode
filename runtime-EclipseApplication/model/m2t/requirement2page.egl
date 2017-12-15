@@ -9,42 +9,41 @@
 </head>
 
 <body>
-
+<a href="[%=requirement.eContainer().~link%]" > Home </a> 
+|
 <a href="[%=requirement.eContainer().~alternativeLink%]" > [%=requirement.eContainer().~alternativeLinkText%] </a>
 
-<h1>[%=requirement.id%]</h1>
+<h1>[%=requirement.type().name + ": " + requirement.id%]</h1>
+
+
+<table>
 
 <h3>Description</h3>
 <p>[%=requirement.description%]</p>
 
+
 <h3>Progress</h3>
 <meter value="[%=requirement.progress%]" max="100"></meter>
 
+
 <h3>Parents</h3>
-[%for (r in requirement.parents){%]
-[%=r.toLink()%]
-[%}%]
+[%=requirement.parents.toList()%]
+
 
 <h3>Children</h3>
-[%for (r in requirement.children){%]
-[%=r.toLink()%]
-[%}%]
+[%=requirement.children.toList()%]
+
 
 <h3>Conflicts</h3>
-[%for (r in requirement.conflictsIncoming){%]
-[%=r.toLink()%]
-[%}%]
+[%=requirement.conflictsIncoming.toList()%]
 
-[%for (r in requirement.conflictsOutgoing){%]
-[%=r.toLink()%]
-[%}%]
+[%=requirement.conflictsOutgoing.toList()%]
 
 
 [%if (requirement.type().name == "SystemRequirement") {%]
 	<h3>Test Cases</h3>
-	[%for (tc in requirement.testCases){%]
-	[%=tc.toLink()%]
-	[%}%]
+	[%=requirement.testCases.toList()%]
+
 [%}%]
 
 </body>
