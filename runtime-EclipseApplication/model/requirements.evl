@@ -1,13 +1,3 @@
-//a) Requirement id should be unique.
-//b) Requirement description should be at least 10 characters long.
-//c) Progress must be between 0 and 100 %.
-//d) Conflicting requirements with common ancestor should not contribute to progress average.
-//e) Requirements cannot be in conflict and dependency at the same time.
-//f) There cannot be any loops in children including self referential children.
-//g) System Requirements cannot be parents of Customer Requirements.
-//h) System Requirements cannot be root nodes.
-//i) Customer Requirements cannot be leaf nodes.
-
 
 context Identifiable{
 
