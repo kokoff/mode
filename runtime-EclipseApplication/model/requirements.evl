@@ -19,8 +19,7 @@ context Identifiable{
 		
 		check {
 				
-				var duplicates = Identifiable.allInstances().select(r|r.id == self.id and r <> self
-								and (r.type()==self.type() or r.isKindOf(Requirement) and self.isKindOf(Requirement)) );
+				var duplicates = Identifiable.allInstances().select(r|r.id == self.id and r <> self );
 				
 				for (i in duplicates){
 					i.~idChecked=true;
@@ -87,51 +86,128 @@ context Requirement{
 		}
 	}
 	
-	//CONFLICTS
+
 	
 	// There are no conflicting requirements with common ancestors.
-	constraint NoConflictsInTree{
-	
+	constraint NoConflictsShareAncestor{
+		
 		check { 
-			var ancestors = self.closure(r|r.parents);	// collect all ancestors
+			var ancestors = self.ancestors();	// collect all ancestors
 			
-			// incoming conflicting requirements which are in the same tree and have not been checked
-			var incomingConflictsInTree = self.conflictsIncoming.select(d| 
-			d.closure(r|r.parents).including(d).exists(r| ancestors.includes(r)) 
-			and not d.~conflictsChecked.isDefined()).asSet(); 
+			// incoming conflicting requirements which have a common ancestor and have not been checked
+			var invalidIncomingConflicts = self.conflictsIncoming.select(d| 
+			d.hasCommonAncestor(ancestors) and not d.~conflictsChecked.isDefined()
+			).asSet(); 
 			
-			// outgoing conflicting requirements which are in the same tree and have not been checked
-			var outgoingConflictsInTree = self.conflictsOutgoing.select(d| 
-			d.closure(r|r.parents).including(d).exists(r| ancestors.includes(r)) 
-			and not d.~conflictsChecked.isDefined()).asSet();
+			// outgoing conflicting requirements which have a common ancestor and have not been checked
+			var invalidOutgoingConflicts = self.conflictsOutgoing.select(d| 
+			d.hasCommonAncestor(ancestors) and not d.~conflictsChecked.isDefined()
+			).asSet();
 			
-			self.~conflictsChecked = true;
+			//self.~conflictsChecked = true;
 			
-			return incomingConflictsInTree.isEmpty() and
-			outgoingConflictsInTree.isEmpty();
+			return invalidIncomingConflicts.isEmpty() and
+			invalidOutgoingConflicts.isEmpty();
 		}
 				
 		message : "Requirement " + self.id + " cannot be in conflict with the requirements in the " +
-				incomingConflictsInTree.includingAll(outgoingConflictsInTree).
+				invalidIncomingConflicts.includingAll(invalidOutgoingConflicts).
 				collect(r|r.id).asString() +
-				" because they are in the same tree."
+				" because they share common ancestors."
 				
 		fix {
 			title : "Remove problematic conflicts"
 			
 			do {
-				self.conflictsIncoming.removeAll(incomingConflictsInTree);
-				self.conflictsOutgoing.removeAll(outgoingConflictsInTree);
+				self.conflictsIncoming.removeAll(invalidIncomingConflicts);
+				self.conflictsOutgoing.removeAll(invalidOutgoingConflicts);
 			}
 		}
 	}
+	
+	// The disjunctive union of the sets of children of two conflicting requirements must not be empty
+	constraint disjunctiveUnionNotEmpty{
+		
+		check {
+				var descendants = self.descendants();	// collect all descendants
+				
+				// incoming conflicting requirements which have an empty disjunctive union of children
+				var invalidIncomingConflicts = self.conflictsIncoming.select(d| 
+				d.disjunctiveUnionOfDescendantsIsEmpty(descendants) and not d.~conflictsChecked.isDefined()
+				).asSet(); 
+				
+				// outgoing conflicting requirements which have an empty disjunctive union of children
+				var invalidOutgoingConflicts = self.conflictsOutgoing.select(d| 
+				d.disjunctiveUnionOfDescendantsIsEmpty(descendants) and not d.~conflictsChecked.isDefined()
+				).asSet();
+				
+				self.~conflictsChecked = true;
+				
+				return invalidIncomingConflicts.isEmpty() and
+				invalidOutgoingConflicts.isEmpty();
+			}
+				
+		message : "Requirement " + self.id + " cannot be in conflict with the requirements in the " +
+				invalidIncomingConflicts.includingAll(invalidOutgoingConflicts).
+				collect(r|r.id).asString() +
+				" because their dijunctive union of descendants is empty."
+				
+		fix {
+			title : "Remove problematic conflicts"
+			
+			do {
+				self.conflictsIncoming.removeAll(invalidIncomingConflicts);
+				self.conflictsOutgoing.removeAll(invalidOutgoingConflicts);
+			}
+		}
+	}
+	
+	
+	// Conflicting requirements cannot be both have 100% progress
+	constraint CompletedConflicts{
+	
+		guard : self.progress == 100 and 
+				self.satisfies("disjunctiveUnionNotEmpty") and self.satisfies("NoConflictsShareAncestor")
+	
+		check {
+				// incoming conflicting requirements which are also at 100% progress
+				var invalidIncomingConflicts = self.conflictsIncoming.select(c|
+				c.progress == 100 and not c.~conflictsChecked.isDefined()
+				).asSet();
+				
+				// outgoing conflicting requirements which are also at 100% progress
+				var invalidOutgoingConflicts = self.conflictsOutgoing.select(c|
+				c.progress == 100 and not c.~conflictsChecked.isDefined()
+				).asSet();
+				
+				self.~conflictsChecked = true;
+				
+				return invalidIncomingConflicts.isEmpty() and
+				invalidOutgoingConflicts.isEmpty();
+			}
+				
+		message : "Requirement " + self.id + " cannot be in conflict with the requirements in the " +
+				invalidIncomingConflicts.includingAll(invalidOutgoingConflicts).
+				collect(r|r.id).asString() +
+				" because they are all at 100% progress which condradicts the definition of a conflict."
+				
+		fix {
+			title : "Remove problematic conflicts"
+			
+			do {
+				self.conflictsIncoming.removeAll(invalidIncomingConflicts);
+				self.conflictsOutgoing.removeAll(invalidOutgoingConflicts);
+			}
+		}
+	}
+
 	
 
 	//DEPENDENCIES
 	
 	// There cannot be any loops in children including self referential children.
 	constraint DependencyLoops {
-		check : self.closure(r|r.children).excludes(self)
+		check : self.descendants().excludes(self)
 		
 		message : "Requirement " + self.id + " is part of a dependency loop!"
 	}
@@ -140,6 +216,7 @@ context Requirement{
 
 
 context SystemRequirement{
+
 	// System Requirements cannot be root nodes.
 	constraint SystemRootNodes{
 		check : self.parents.notEmpty()
@@ -177,6 +254,7 @@ context SystemRequirement{
 
 	
 context CustomerRequirement{
+
 	// Customer Requirements cannot be leaf nodes.
 	constraint CustomerLeafNodes{
 		check : self.children.notEmpty()
@@ -196,6 +274,7 @@ context CustomerRequirement{
 
 
 context TestCase{
+
 	// Each test case verifies at least one system requirement
 	constraint VerifiesAtLeastOne{
 		check : self.requirements.notEmpty()
@@ -211,23 +290,21 @@ context TestCase{
 		}
 	}
 	
-	// A test case cannot verrify the same requirement twice (e.g. a requirement and it's ancestor)
-	constraint NotVerifyRequirementAndAncestor{
+	// A test case cannot verrify non leaf requirements
+	constraint VerifyOnlyLeafRequirements{
 		
 		check {
-			var requirementDescendants = self.requirements.closure(d|d.children);
-			var duplicates = self.requirements.select(r| requirementDescendants.contains(r));
-			return duplicates.isEmpty();
+			var nonLeafRequirements = self.requirements.select(r|r.children.notEmpty());
+			return nonLeafRequirements.isEmpty();
 		}
 		
-		message : "Test case " + self.id + " cannot verify a requirement and it's ancestor" + 
-					" because this implies verifying the requirement twice!"
+		message : "Test case " + self.id + " cannot verify a non leaf requirement."
 					
 		fix {
-			title : "Remove child requirement from test case"
+			title : "Remove all non leaf requirement from test case"
 			
 			do {
-				self.requirements.removeAll(duplicates);
+				self.requirements.removeAll(nonLeafRequirements);
 			}
 		}
 	}
@@ -238,29 +315,42 @@ context TestCase{
 
 context TeamMember{
 
-	// A team member cannot be assigned the same requirement twice (e.g. a requirement and it's ancestor)
-	constraint NotVerifyRequirementAndAncestor{
+	// A team member cannot be assigned a non leaf requirements
+	constraint AssignedOnlyLeafRequirements{
 		
 		check {
-			var requirementDescendants = self.requirements.closure(d|d.children);
-			var duplicates = self.requirements.select(r| requirementDescendants.contains(r));
-			return duplicates.isEmpty();
+			var nonLeafRequirements = self.requirements.select(r|r.children.notEmpty());
+			return nonLeafRequirements.isEmpty();
 		}
 		
-		message : "Team member " + self.id + " cannot be assigned a requirement and it's ancestor" + 
-					" because this implies being assigned the requirement twice!"
+		message : "Team member " + self.id + " cannot be assigned a non leaf requirement."
 					
 		fix {
-			title : "Remove child requirement from team members requirements"
+			title : "Remove all non leaf requirements assigned to team member"
 			
 			do {
-				self.requirements.removeAll(duplicates);
+				self.requirements.removeAll(nonLeafRequirements);
 			}
 		}
 	}
+
 }
 
+operation Requirement disjunctiveUnionOfDescendantsIsEmpty(otherDescendants){
+	var descendants = self.descendants(); 
+	return descendants.containsAll(otherDescendants) or otherDescendants.containsAll(descendants);
+}
 
+operation Requirement descendants(){
+	return self.closure(r|r.children);
+}
 
+operation Requirement ancestors(){
+	return self.closure(r|r.parents);
+}
 
+operation Requirement hasCommonAncestor(otherAncestors){
+			return not self.ancestors().including(self).
+			excludesAll(otherAncestors);
+}
 
