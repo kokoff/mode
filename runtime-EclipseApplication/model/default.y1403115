@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://requirements">
-  <requirements xsi:type="CustomerRequirement" progress="45" children="//@requirements.1"/>
-  <requirements xsi:type="SystemRequirement" progress="45" parents="//@requirements.0"/>
-</Model>
