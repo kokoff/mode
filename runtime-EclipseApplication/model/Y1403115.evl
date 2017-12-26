@@ -4,9 +4,10 @@ context Identifiable{
 	//FIELDS
 	
 	// Requirement id should be unique.
-	constraint Uniqueid{
-		guard : not self.~idChecked.isDefined()
+	constraint UniqueId{
 		
+		guard : not self.~idChecked.isDefined()
+				
 		check {
 				
 				var duplicates = Identifiable.allInstances().select(r|r.id == self.id and r <> self );

@@ -43,7 +43,7 @@ public abstract class RequirementImpl extends IdentifiableImpl implements Requir
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String DESCRIPTION_EDEFAULT = "The description goes here.";
+	protected static final String DESCRIPTION_EDEFAULT = "Write description here.";
 
 	/**
 	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.

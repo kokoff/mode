@@ -1,6 +1,6 @@
 [%
 
-var requirementsModel = Model.all.first();
+var requirementsModel = RequirementsModel.all.first();
 
 requirementsModel.~link = "index" + suffix + '.html';
 requirementsModel.~alternativeLink = "index" + otherSuffix + ".html"; 
@@ -12,7 +12,7 @@ for (identifiable in Identifiable.all){
 
 generateWebsite(requirementsModel);
 
-operation generateWebsite (requirementsModel : Model) {
+operation generateWebsite (requirementsModel : RequirementsModel) {
 	
 	var requirementTemplate : Template;
 	for (requirement in requirementsModel.requirements) {

@@ -1,10 +1,10 @@
-@namespace(URI="http://requirements", prefix="")
+@namespace(URI="requirements", prefix="")
 package Y1403115;
 
 
 @gmf.diagram
-class Model{
-	val TestCase[*] testcases;
+class RequirementsModel{
+	val TestCase[*] testCases;
 	val TeamMember[*] teamMembers;
 	val Requirement[*] requirements;
 }
@@ -12,12 +12,12 @@ class Model{
 
 @gmf.node(label="id")
 abstract class Identifiable {
-	attr String ~id;
+	attr String ~id="default_id";
 }
 	
 abstract class Describable{
 	@gmf.label()
-	attr String description="The description goes here.";
+	attr String description="Write description here.";
 }
 
 
@@ -45,8 +45,8 @@ class CustomerRequirement extends Requirement{
 
 @gmf.node(border.color="255,0,0")
 class SystemRequirement extends Requirement{
-	@gmf.link(style="dash", 
-		tool.name="System Requirement Conflict", color="255,0,0")
+	@gmf.link(style="dash", color="255,0,0",
+		tool.name="System Requirement Conflict")
 	ref SystemRequirement[*]#conflictsIncoming conflictsOutgoing;
 	ref SystemRequirement[*]#conflictsOutgoing conflictsIncoming;
 	
@@ -57,7 +57,7 @@ class SystemRequirement extends Requirement{
 @gmf.node(border.color="255,255,0")
 class TestCase extends Identifiable, Describable{
 	@gmf.link(color="255,255,0", 
-		tool.name="Verifies")
+		tool.name="Verification")
 	ref SystemRequirement[1..*]#testCases  requirements;
 }
 
@@ -65,6 +65,6 @@ class TestCase extends Identifiable, Describable{
 @gmf.node(border.color="0,255,0")
 class TeamMember extends Identifiable{
 	@gmf.link(color="0,255,0", 
-		tool.name="Assigned")
+		tool.name="Assignment")
 	ref Requirement[*] requirements;
 }

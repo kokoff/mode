@@ -4,24 +4,23 @@
   	
   	<!--Load the Default model-->
     <epsilon.emf.loadModel name="Main"
-      modelfile="../default.y1403115"
-      metamodeluri="http://requirements"
+      modelfile="../models/1.y1403115"
+      metamodeluri="requirements"
       read="true" store="false"/>
     
   	<!--Load the Simplified model-->
     <epsilon.emf.loadModel name="Simplified"
       modelfile="simplified.y1403115"
-      metamodeluri="http://requirements"
+      metamodeluri="requirements"
       read="false" store="false"/>
   	
   	<!--Run the validation on the Default model-->
-  	<epsilon.evl src="../requirements.evl">
-  		<parameter name="dir" value="gen1"/>
+  	<epsilon.evl src="../Y1403115.evl">
   		<model ref="Main"/>
   	</epsilon.evl>
   	
   	<!--Run the Default -> Simplified M2M transformation-->
-    <epsilon.etl src="../m2m/req2simple.etl">
+    <epsilon.etl src="../m2m/Y1403115.etl">
       <model ref="Main" as="In"/>
       <model ref="Simplified" as="Out" />
     </epsilon.etl>

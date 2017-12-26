@@ -1,6 +1,6 @@
 
 pre {
-	var m = new Out!Model;
+	var m = new Out!RequirementsModel;
 }
 
 @abstract
