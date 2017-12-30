@@ -116,7 +116,7 @@ context Requirement{
 		}
 	}
 	
-	// The disjunctive union of the sets of children of two conflicting requirements must not be empty
+	// The disjunctive union of the sets of descendants of two conflicting requirements must not be empty
 	constraint disjunctiveUnionNotEmpty{
 		
 		check {
@@ -329,7 +329,8 @@ context TeamMember{
 
 operation Requirement disjunctiveUnionOfDescendantsIsEmpty(otherDescendants){
 	var descendants = self.descendants(); 
-	return descendants.containsAll(otherDescendants) or otherDescendants.containsAll(descendants);
+	return (descendants.containsAll(otherDescendants) or otherDescendants.containsAll(descendants)) and
+			not (descendants.isEmpty() and  otherDescendants.isEmpty());
 }
 
 operation Requirement descendants(){
