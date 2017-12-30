@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RequirementsModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="requirements">
+  <testCases id="TestCase1" requirements="//@requirements.9"/>
+  <testCases id="TestCase2" requirements="//@requirements.7 //@requirements.6"/>
+  <teamMembers id="TeamMember1" requirements="//@requirements.9"/>
+  <teamMembers id="TeamMember2" requirements="//@requirements.7 //@requirements.6"/>
+  <teamMembers id="TeamMember3" requirements="//@requirements.8"/>
+  <requirements xsi:type="CustomerRequirement" id="CustomerRequirement1" progress="37" children="//@requirements.3 //@requirements.2"/>
+  <requirements xsi:type="CustomerRequirement" id="CustomerRequirement2" progress="85" children="//@requirements.4 //@requirements.5"/>
+  <requirements xsi:type="SystemRequirement" id="SystemRequirement1" parents="//@requirements.0" conflictsOutgoing="//@requirements.4"/>
+  <requirements xsi:type="SystemRequirement" id="SystemRequirement2" progress="75" children="//@requirements.8 //@requirements.9" parents="//@requirements.0"/>
+  <requirements xsi:type="SystemRequirement" id="SystemRequirement3" progress="100" parents="//@requirements.1" conflictsIncoming="//@requirements.2"/>
+  <requirements xsi:type="CustomerRequirement" id="CustomerRequirement3" progress="70" children="//@requirements.6 //@requirements.7" parents="//@requirements.1 //@requirements.10"/>
+  <requirements xsi:type="SystemRequirement" id="SystemRequirement4" progress="65" parents="//@requirements.5" testCases="//@testCases.1"/>
+  <requirements xsi:type="SystemRequirement" id="SystemRequirement5" progress="75" parents="//@requirements.5" testCases="//@testCases.1"/>
+  <requirements xsi:type="SystemRequirement" id="SystemRequirement6" progress="50" parents="//@requirements.3"/>
+  <requirements xsi:type="SystemRequirement" id="SystemRequirement7" progress="100" parents="//@requirements.3" testCases="//@testCases.0"/>
+  <requirements xsi:type="CustomerRequirement" id="CustomerRequirement4" progress="70" children="//@requirements.5"/>
+</RequirementsModel>
