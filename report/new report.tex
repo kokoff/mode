@@ -199,6 +199,9 @@ class SystemRequirement extends Requirement{
 	\subsection{Model to Model Transformation}
 	The M2M (Model to Model) transformation is done using the Epsilon Transformation Language (ETL) \cite{etl} and is done in a single ETL file. It takes an imput model and creates an output model removing all completed requirements. Following the ETL syntax rules are defined for transforming each object in the input model to a coresponding object in the output model. The requirements transformation rule uses a guard in order to create requirements in the output model only if they are not completed. In the same rule also the children and parents for each requirement are filtered so that only non completed ones exist in the output model. Team members and test-cases are transformed only if they contain at least one non completed requirement. Because there are several abstract classes defined in the meta model it makes sense to use the concept of abstract transformation rules from ETL to transform them. This limits duplication in the M2M transformation rules.
 	
+	\subsubsection{Running Instructions}
+	The M2M transformation can be ran using an ETL eclipse run configuration, which specifies and input model named "In" and an output model named "Out".
+	
 	\subsection{Model to Text Transformation}
 	The model to text transformation is (M2T) transformation is implemented in the Epsilon Generation Language \cite{egl} and is split across multiple EGL files:
 	\begin{itemize}[noitemsep]
@@ -209,7 +212,7 @@ class SystemRequirement extends Requirement{
 		\item model2index.egl - Generate main html page from requirementsModel.
 		\item util.egl - Some utility functiions used to create links, lists of objects and nested list of requirements.
 		\item main.egl - Coordinates the generation of all pages for a particular model. Uses input parameters so it can be reused for generating different versions of the same website.
-		\item Y1403115.xml - Ant build xml file, which generates a simplified model from the original one and then generates two versions of the website - one for the original and one for the simplified model and links them together.
+		\item Y1403115.xml - ANT \cite{ant} build xml file, which generates a simplified model from the original one and then generates two versions of the website - one for the original and one for the simplified model and links them together.
 	\end{itemize}
 
 	The most complex requirement for the M2T transformation is the ability to filter out completed requirements. This is done by generating two versions of the website - one with all requirements and one with non completed requirements only. Every page of both websites links to the main page of the other. In order to generate the simplified version of the website the M2M transformation described in the previous chapter is used. This is common model driven engineering pattern, which separates the simplification of the model from the generation of the text and also avoids duplication of the M2M functionality in the M2T transformation. In order to create a single version of the website the main.egl script requires some parameters in order to create the links to the other website version. These parameters are the suffix appended to all page names, the suffix of the other version of the website and the text to display in the cross-reference link. Each page in the website uses the id of the object it represents as the file name (along with the version suffix), this can be done since id's always need to be unique. In order to ensure that the original model used for the M2T transformation is valid the EVL validation is also part of the ant build task.
@@ -219,7 +222,9 @@ class SystemRequirement extends Requirement{
 	In order to drill down the requirements/test-cases decomposition tree a user can navigate requirements pages by following links to their children and/or test-cases. 
 	
 	The progress of each requirement is shown as a progress bar on each requirements page.
-	
+
+	\subsubsection{Running Instructions}
+	The transformation can be ran from the Y1403115.xml ANT build script. The transformed model has to be specified manually in the script. Also the locations of the m2m transformation folder and the Y1403115.evl valiation script are hard coded in the build script as well as the output directory which is created in the same folder as the build script and is called "gen". Also in order for eclipse to pick up changes in the gen directory it has to be manually refreshed.
 	
 \printbibliography
 

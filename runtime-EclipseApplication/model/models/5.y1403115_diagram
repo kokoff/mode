@@ -54,7 +54,7 @@
     <styles xmi:type="notation:FontStyle" xmi:id="_numtwu1fEee5YYb-9HSvFA" fontName="Cantarell"/>
     <styles xmi:type="notation:FillStyle" xmi:id="_numtw-1fEee5YYb-9HSvFA"/>
     <element xmi:type="TeamMember" href="5.y1403115#//@teamMembers.1"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_numtxO1fEee5YYb-9HSvFA" x="320" y="280"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_numtxO1fEee5YYb-9HSvFA" x="315" y="290"/>
   </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_YinEse1fEee5YYb-9HSvFA"/>
   <element xmi:type="RequirementsModel" href="5.y1403115#/"/>

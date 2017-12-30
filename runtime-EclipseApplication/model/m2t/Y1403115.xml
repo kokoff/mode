@@ -4,7 +4,7 @@
   	
   	<!--Load the Default model-->
     <epsilon.emf.loadModel name="Main"
-      modelfile="../models/1.y1403115"
+      modelfile="../models/example.y1403115"
       metamodeluri="requirements"
       read="true" store="false"/>
     
