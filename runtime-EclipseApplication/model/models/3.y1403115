@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RequirementsModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="requirements">
+  <requirements xsi:type="CustomerRequirement" id="ErrorCustomer1" children="//@requirements.2" conflictsOutgoing="//@requirements.1"/>
+  <requirements xsi:type="CustomerRequirement" id="ErrorCustomer2" children="//@requirements.2" conflictsIncoming="//@requirements.0"/>
+  <requirements xsi:type="SystemRequirement" id="ErrorSystem1" parents="//@requirements.1 //@requirements.0"/>
+  <requirements xsi:type="CustomerRequirement" id="CorrectCustomer1" children="//@requirements.5 //@requirements.6" conflictsOutgoing="//@requirements.4"/>
+  <requirements xsi:type="CustomerRequirement" id="CorrectCustomer2" children="//@requirements.5 //@requirements.7" conflictsIncoming="//@requirements.3"/>
+  <requirements xsi:type="SystemRequirement" id="CorrectSystem1" parents="//@requirements.3 //@requirements.4"/>
+  <requirements xsi:type="SystemRequirement" id="CorrectSystem2" parents="//@requirements.3"/>
+  <requirements xsi:type="SystemRequirement" id="CorrectSystem3" parents="//@requirements.4"/>
+  <requirements xsi:type="CustomerRequirement" id="ErrorCustomer3" children="//@requirements.10 //@requirements.9"/>
+  <requirements xsi:type="SystemRequirement" id="ErrorSystem2" parents="//@requirements.8" conflictsIncoming="//@requirements.10"/>
+  <requirements xsi:type="SystemRequirement" id="ErrorSystem3" parents="//@requirements.8" conflictsOutgoing="//@requirements.9"/>
+  <requirements xsi:type="CustomerRequirement" id="ErrorCustomer4" progress="100" children="//@requirements.13" conflictsOutgoing="//@requirements.12"/>
+  <requirements xsi:type="CustomerRequirement" id="ErrorCustomer5" progress="100" children="//@requirements.14" conflictsIncoming="//@requirements.11"/>
+  <requirements xsi:type="SystemRequirement" id="ErrorSystem4" progress="100" parents="//@requirements.11"/>
+  <requirements xsi:type="SystemRequirement" id="ErrorSystem5" progress="100" parents="//@requirements.12"/>
+</RequirementsModel>

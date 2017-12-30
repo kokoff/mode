@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RequirementsModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="requirements">
+  <testCases id="CorrectTestCase1" requirements="//@requirements.1"/>
+  <testCases id="ErrorTestCase1"/>
+  <testCases id="ErrorTestCase2" requirements="//@requirements.3"/>
+  <requirements xsi:type="CustomerRequirement" id="CorrectCustomer1" children="//@requirements.1"/>
+  <requirements xsi:type="SystemRequirement" id="CorrectSystem1" parents="//@requirements.0" testCases="//@testCases.0"/>
+  <requirements xsi:type="CustomerRequirement" id="ErrorCustomer1" children="//@requirements.3"/>
+  <requirements xsi:type="SystemRequirement" id="ErrorSystem1" children="//@requirements.4" parents="//@requirements.2" testCases="//@testCases.2"/>
+  <requirements xsi:type="SystemRequirement" id="ErrorSystem2" parents="//@requirements.3"/>
+</RequirementsModel>

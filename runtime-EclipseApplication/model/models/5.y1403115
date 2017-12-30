@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RequirementsModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="requirements">
+  <teamMembers id="CorrectTeamMember1" requirements="//@requirements.1"/>
+  <teamMembers id="ErrorTeamMember1" requirements="//@requirements.2"/>
+  <requirements xsi:type="CustomerRequirement" id="CorrectCustomer1" children="//@requirements.1"/>
+  <requirements xsi:type="SystemRequirement" id="CorrectSystem1" parents="//@requirements.0"/>
+  <requirements xsi:type="CustomerRequirement" id="ErrorCustomer1" children="//@requirements.3"/>
+  <requirements xsi:type="SystemRequirement" id="ErrorSystem1" parents="//@requirements.2"/>
+</RequirementsModel>
