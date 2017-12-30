@@ -17,7 +17,7 @@ abstract class Identifiable {
 	
 abstract class Describable{
 	@gmf.label()
-	attr String description="Write description here.";
+	attr String description="default_description";
 }
 
 
