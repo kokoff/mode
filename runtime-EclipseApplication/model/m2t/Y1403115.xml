@@ -15,7 +15,7 @@
       read="false" store="false"/>
   	
   	<!--Run the validation on the Default model-->
-  	<epsilon.evl src="../Y1403115.evl">
+  	<epsilon.evl src="../metamodel/Y1403115.evl">
   		<model ref="Main"/>
   	</epsilon.evl>
   	

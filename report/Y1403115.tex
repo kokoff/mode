@@ -1,7 +1,7 @@
 \documentclass[11pt,a4paper]{article}
 
 
-\usepackage[top=1.8cm, bottom=1.8cm, left=1.8cm, right=1.8cm]{geometry} %Margins if you run out of space
+\usepackage[top=1.7cm, bottom=1.7cm, left=2cm, right=2cm]{geometry} %Margins if you run out of space
 
 \usepackage[style=ieee]{biblatex}
 \addbibresource{references.bib}
@@ -169,6 +169,8 @@ class SystemRequirement extends Requirement{
 	All requirements have a progress field which should be set by the user, if the requirement doesn't have any children or is the average of its children's progress otherwise. A possible implementation of the progress attribute is to just leave it to the user to calculate the averages and check for this in the EVL validation. This is error prone and far from user friendly. 
 	
 	In order to automate calculation of progress, the java code of the generated GMF editor (see \autoref{sec:editor} for details) had to be modified. In particular the RequirementImpl.java class file, which defines the implementation of requirement entities. An \texttt{updateProgress} method is added to the class, which calculates the average progress of all child requirements and sets it as the current requirement's progress. This method is called by a custom notification listener (\texttt{Adapter}) defined in the constructor of \texttt{RequirementsImpl} class. The listener does two things: Whenever the progress field of the \texttt{RequirementImpl} object is set, the \texttt{updateProgress} method of all parents is called. And whenever a new child is added, the \texttt{updateProgress} method is called for the current \texttt{RequirementImpl} object. This implementation guarantees that whenever the progress of a leaf requirement is set in the editor, a chain reaction would cause all ancestors of the requirement to update their progress.
+	
+	Note: After generating GMF editor replace src/Y1403115.impl/RequirementImpl.java with the RequirementImpl.java provided in the submission.
 
 	An additional constraint for the progress attribute is that it must be a valid percentage. This is checked for in the EVL validation.
 	
@@ -248,7 +250,7 @@ class SystemRequirement extends Requirement{
 	Requirements/test-cases decomposition tree can be drilled down, by following links to child requirements and associated test-cases. 	The progress of each requirement is shown as a progress bar on its corresponding page. Requirements corresponding to each team member/test-case are displayed on the main page of the website. Completed requirements can be filtered via the link to the alternative simplified version of the website at the top of each page.
 	
 	\subsubsection{Running Instructions}
-	The transformation can be ran from the Y1403115.xml ANT build script. The input model has to be specified manually in the script and defaults to the example.Y1403115 model (see \autoref{sec:tests}). The location of the EVL validation, M2M and M2T transformations is hard coded in the script. The output location for the website is called "gen" and is in the current directory of the ANT script. 
+	The transformation can be ran from the Y1403115.xml ANT build script. The script has to run in the same JRE as the workspace. The input model has to be specified manually in the script and defaults to the example.Y1403115 model (see \autoref{sec:tests}). The location of the EVL validation, M2M and M2T transformations is hard coded in the script and follows the directory structure of the submission. The output location for the website is called "gen" and is in the current directory of the ANT script. 
 	
 \printbibliography
 
